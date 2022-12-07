@@ -2,4 +2,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: aliceblue;
+}
+.App{
+  height: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
