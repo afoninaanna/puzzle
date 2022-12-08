@@ -1,10 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { LOGIN_ROUTE, PUZZLE_ROUTE } from "../utils/consts";
 import { privateRoutes, publicRoutes } from "./../routes";
-const AppRouter = () => {
-    const isAuth = false;
+const AppRouter = ({ user }) => {
     return (
-        isAuth?
+        user?
         (
             <Routes>
                 {privateRoutes.map(({path, Component}) => (
