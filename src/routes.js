@@ -1,5 +1,5 @@
 import Login from "./components/Login/Login";
-import Puzzle from "./components/Puzzle";
+import Puzzle from "./components/Puzzle/Puzzle";
 import Register from "./components/Register/Register";
 import { LOGIN_ROUTE, PUZZLE_ROUTE, REGISTER_ROUTE } from "./utils/consts";
 

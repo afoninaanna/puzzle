@@ -14,7 +14,8 @@ const Login = () => {
   }
 
   return (
-    <div className={s.Container}>
+    <div className={s.Page}>
+      <div className={s.Container}>
         <p style={{marginBottom: 20 + "px"}}>Логин</p>
         <div className={s.Field}>
           <p>Email</p>
@@ -39,7 +40,9 @@ const Login = () => {
         <p className={s.Register}>
           Впервые тут? <Link to={REGISTER_ROUTE}>Зарегистрироваться</Link>
         </p>
+      </div>
     </div>
+
   )
 }
 

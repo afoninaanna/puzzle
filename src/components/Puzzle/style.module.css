@@ -1,0 +1,75 @@
+:root{
+    --index: calc(1vw + 1vh)
+}
+/* div {
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+} */
+.Page{
+    display: grid;
+    grid-template-areas: 
+    "p p"
+    "c t";
+    grid-template-rows: calc(var(--index)*3) 600px;
+    grid-template-columns: 800px 120px;
+    justify-content: center;
+    column-gap: 2%;
+}
+.Params{
+    grid-area: p;
+    display: flex;
+    align-items: center;
+    gap: 3%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+.Params div{
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    gap: 10px;
+    align-items:center;
+}
+.Params img{
+    width: calc(var(--index)*1.5);
+    height: calc(var(--index)*1.5);
+    -webkit-user-drag: none;
+}
+.Params label{
+    cursor: pointer;
+}
+.Time{
+    font-weight: 900;
+}
+.Score{
+    font-weight: 900;
+}
+
+.Exit {
+    height: calc(var(--index)*1.5);
+    padding-left: 4%;
+    padding-right: 4%;
+    background-color: #a4c4b5;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    transition: all 0.3s;
+}
+.Exit:hover{
+    cursor: pointer;
+    background-color: #71b696;
+}
+.Canvas{
+    grid-area: c;
+}
+.Canvas div{
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+}
+.Tape{
+    grid-area: t;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+}

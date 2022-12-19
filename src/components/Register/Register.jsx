@@ -14,31 +14,33 @@ const Register = () => {
   }
 
   return (
-    <div className={s.Container}>
-      <p style={{marginBottom: 20 + "px"}}>Регистрация</p>
-      <div className={s.Field}>
-        <p>Email</p>
-        <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          type='text'
-          placeholder='Введите логин'
-          className={s.Input} />
+    <div className={s.Page}>
+      <div className={s.Container}>
+        <p style={{marginBottom: 20 + "px"}}>Регистрация</p>
+        <div className={s.Field}>
+          <p>Email</p>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type='text'
+            placeholder='Введите логин'
+            className={s.Input} />
+        </div>
+        <br />
+        <div className={s.Field}>
+          <p>Пароль</p>
+          <input
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type='text'
+            placeholder='Введите пароль'
+            className={s.Input} />
+        </div>
+        <button onClick={register} className={s.Register}>Зарегистрироваться</button>
+        <p className={s.Login}>
+            Уже зарегистрированы? <Link to={LOGIN_ROUTE}>Войти</Link>
+        </p>
       </div>
-      <br />
-      <div className={s.Field}>
-        <p>Пароль</p>
-        <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type='text'
-          placeholder='Введите пароль'
-          className={s.Input} />
-      </div>
-      <button onClick={register} className={s.Register}>Зарегистрироваться</button>
-      <p className={s.Login}>
-          Уже зарегистрированы? <Link to={LOGIN_ROUTE}>Войти</Link>
-      </p>
     </div>
   )
 }
