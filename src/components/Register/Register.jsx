@@ -15,26 +15,30 @@ const Register = () => {
 
   return (
     <div className={s.Container}>
-      <p>Register</p>
-      <p>
-        <strong>Email</strong>
+      <p style={{marginBottom: 20 + "px"}}>Регистрация</p>
+      <div className={s.Field}>
+        <p>Email</p>
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type='text'
-          placeholder='Введите логин' />
-      </p>
+          placeholder='Введите логин'
+          className={s.Input} />
+      </div>
       <br />
-      <p>
-        <strong>Пароль</strong>
+      <div className={s.Field}>
+        <p>Пароль</p>
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type='text'
-          placeholder='Введите пароль' />
+          placeholder='Введите пароль'
+          className={s.Input} />
+      </div>
+      <button onClick={register} className={s.Register}>Зарегистрироваться</button>
+      <p className={s.Login}>
+          Уже зарегистрированы? <Link to={LOGIN_ROUTE}>Войти</Link>
       </p>
-      <button onClick={register}>Зарегистрироваться и войти</button>
-      <Link to={LOGIN_ROUTE}><button>Логин</button></Link>
     </div>
   )
 }
