@@ -1,7 +1,8 @@
 import Login from "./components/Login/Login";
 import Puzzle from "./components/Puzzle/Puzzle";
 import Register from "./components/Register/Register";
-import { LOGIN_ROUTE, PUZZLE_ROUTE, REGISTER_ROUTE } from "./utils/consts";
+import UserSettings from "./components/UserSettings/UserSettings";
+import { LOGIN_ROUTE, PUZZLE_ROUTE, REGISTER_ROUTE, USER_SETTINGS_ROUTE } from "./utils/consts";
 
 export const publicRoutes = [
     {
@@ -17,5 +18,9 @@ export const privateRoutes = [
     {
         path: PUZZLE_ROUTE,
         Component: <Puzzle/>
+    },
+    {
+        path: USER_SETTINGS_ROUTE,
+        Component: <UserSettings/>
     }
 ]

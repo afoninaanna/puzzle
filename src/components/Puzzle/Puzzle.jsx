@@ -29,7 +29,7 @@ const Puzzle = () => {
           <img id="imageView" src={imageView}></img>
           <label htmlFor="imageView">Подсказка</label>
         </div>
-        <button onClick={handleLogOut} className={s.Exit}>Выйти</button>
+        <button onClick={handleLogOut} className={s.Exit}>Выйти из аккаунта</button>
       </div>
       <div className={s.Canvas}>
         <div>

@@ -1,11 +1,3 @@
-:root{
-    --index: calc(1vw + 1vh)
-}
-/* div {
-    border-width: 2px;
-    border-style: solid;
-    border-color: black;
-} */
 .Page{
     display: grid;
     grid-template-areas: 

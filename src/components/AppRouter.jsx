@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { LOGIN_ROUTE, PUZZLE_ROUTE } from "../utils/consts";
+import { LOGIN_ROUTE, PUZZLE_ROUTE, USER_SETTINGS_ROUTE } from "../utils/consts";
 import { privateRoutes, publicRoutes } from "./../routes";
 const AppRouter = ({ user }) => {
     return (
@@ -9,7 +9,7 @@ const AppRouter = ({ user }) => {
                 {privateRoutes.map(({path, Component}) => (
                     <Route path={path} element={Component}/>
                 ))}
-                <Route path='*' element={<Navigate to={PUZZLE_ROUTE}/>}/>
+                <Route path='*' element={<Navigate to={USER_SETTINGS_ROUTE} />} /> 
             </Routes>
         )
         :
