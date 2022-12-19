@@ -1,10 +1,14 @@
 .Page{
+    display: flex;
     width: 100vw;
     height: 100vh;
-    display: flex;
     align-items: center;
-    justify-content: center;
+    flex-flow: row nowrap;
     background-color: #6d7370;
+}
+.Page::before, .Page::after {
+    content: '';  /* Insert pseudo-element */
+    margin: auto; /* Make it push flex items to the center */
 }
 .Container{
     padding-top: 5vh;

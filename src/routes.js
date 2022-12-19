@@ -2,7 +2,8 @@ import Login from "./components/Login/Login";
 import Puzzle from "./components/Puzzle/Puzzle";
 import Register from "./components/Register/Register";
 import UserSettings from "./components/UserSettings/UserSettings";
-import { LOGIN_ROUTE, PUZZLE_ROUTE, REGISTER_ROUTE, USER_SETTINGS_ROUTE } from "./utils/consts";
+import Admin from "./components/Admin/Admin"
+import { LOGIN_ROUTE, PUZZLE_ROUTE, REGISTER_ROUTE, USER_SETTINGS_ROUTE, ADMIN_ROUTE } from "./utils/consts";
 
 export const publicRoutes = [
     {
@@ -22,5 +23,9 @@ export const privateRoutes = [
     {
         path: USER_SETTINGS_ROUTE,
         Component: <UserSettings/>
+    },
+    {
+        path: ADMIN_ROUTE,
+        Component: <Admin/>
     }
 ]

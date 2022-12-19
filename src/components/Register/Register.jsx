@@ -32,7 +32,7 @@ const Register = () => {
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              type='text'
+              type='password'
               placeholder='Введите пароль'
               className={s.Input} />
           </div>

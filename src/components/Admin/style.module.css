@@ -1,3 +1,6 @@
+body{
+    background-color: #6d7370;
+}
 .Page{
     display: flex;
     width: 100vw;
@@ -10,16 +13,16 @@
     content: '';  /* Insert pseudo-element */
     margin: auto; /* Make it push flex items to the center */
 }
-.Container {
+.Container{
+    display: flex;
     padding-top: 5vh;
     padding-bottom: 5vh;
     padding-left: 3vw;
     padding-right: 3vw;
     background-color: #ffffff;
-    display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     box-shadow: 0 0 10px -5px #1d2120;
     -webkit-animation-name: fade;
     -webkit-animation-duration: 1s;
@@ -34,38 +37,29 @@
     from{opacity: .4;}
     to{opacity: 1;}
 }
-.Input {
-    width: 100%;
-    min-width: 100px;
-    border-width: 0 0 1px;
-    outline: none;
-    background-size: 18px;
-    font-family: 'Inter';
-    font-size: calc(var(--index) * 0.6);
-    padding-bottom: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    color: #1d2120;
-    transition: 0.2s;
-}
-.Input.error {
-    box-shadow: 0 5px 6px -5px red;
-    border-width: 0 0 1px;
-    border-color: red;
-    transition: 0.2s;
-}
-.Field {
+.Field{
     display: flex;
-    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
-.Field p {
-    margin: 0;
-    font-weight: 300;
-    font-size: calc(var(--index) * 0.5);
-    color: #9e9e9e;
+.Field select{
+    width: auto;
 }
-.Login {
-    margin-top: 20px;
+.Field input[type="range"]{
+    margin-left: 10px;
+}
+.Field input[type="range"]::before{
+    content: attr(min);
+    margin-left: -10px;
+}
+.Field input[type="range"]::after{
+    content: attr(max);
+    margin-right: -20px;
+}
+.Button{
+    width: 100%;
+    margin-top: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 20%;
@@ -76,19 +70,29 @@
     color: white;
     transition: all 0.3s;
 }
-.Login:hover{
+.Button:hover{
     cursor: pointer;
     background-color: #71b696;
 }
-.Register{
-    margin-top: 30px;
-    font-size: calc(var(--index) * 0.5);
-    color: #9e9e9e;
+.Puzzle{
+    display: grid;
+    grid-template-areas: 
+    "c t";
+    grid-template-rows: 400px;
+    grid-template-columns: 534px 120px;
+    justify-content: center;
+    column-gap: 2%;
 }
-.Register a{
-    color: #a4c4b5;
-    transition: all 0.3s;
+.Canvas{
+    grid-area: c;
 }
-.Register a:hover{
-    color: #71b696;
+.Canvas div{
+    width: 100%;
+    height: 100%;
+    border: 1px solid #ccc;
+}
+.Tape{
+    grid-area: t;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
 }
