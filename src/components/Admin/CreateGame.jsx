@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import s from './style.module.css';
 import Puzzle from '../PuzzleLib/Puzzle'
+import { shuffle} from './../PuzzleLib/utils.js';
 
 const onComplete = () => {
   console.log('Puzzle is completed!');
@@ -27,30 +28,15 @@ const CreateGame = (props) => {
       <div className={s.Puzzle}>
         <Puzzle
           image="https://www.laurag.tv/wp-content/uploads/2020/02/bob-esponja.jpg"
-          width={534}
+          width={500}
           height={400}
-          pieces={5}
+          piecesX={10}
+          piecesY={10}
           onComplete={onComplete}
         />
         <div className={s.Tape}></div>
       </div>
-      <div style={{ display: "flex", gap: 10 + "px" }}>
-        <button
-          className={s.Button}
-          style={{ paddingLeft: 50 + "px", paddingRight: 50 + "px" }}
-        >
-          Перемешать
-        </button>
-        <button
-          className={s.Button}
-          style={{ paddingLeft: 50 + "px", paddingRight: 50 + "px" }}
-        >
-          Сохранить
-        </button>
-      </div>
-      <button onClick={() => props.onSelectComponent("")} className={s.Button}>
-        Закрыть
-      </button>
+      
     </div>
   );
 }

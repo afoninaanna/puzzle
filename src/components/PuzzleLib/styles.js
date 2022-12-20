@@ -7,8 +7,8 @@ export const puzzleWrapperStyles = (props) => ({
 });
 
 export const puzzlePieceStyles = (props) => ({
-    width: `${props.width / props.pieces}px`,
-    height: `${props.height / props.pieces}px`,
+    width: `${props.width / props.piecesX}px`,
+    height: `${props.height / props.piecesY}px`,
     margin: '0 -1px -1px',
     border: '1px solid #000',
     backgroundImage: `url(${props.image})`,

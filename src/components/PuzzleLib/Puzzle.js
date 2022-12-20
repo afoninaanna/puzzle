@@ -5,17 +5,18 @@ import { DndProvider } from 'react-dnd';
 import { puzzleWrapperStyles } from './styles';
 import { shuffle, isEqual } from './utils';
 import Piece from './Piece';
+import s from './../Admin/style.module.css';
 
 const Puzzle = (props) => {
   const { width, height, pieces, piecesX, piecesY, onComplete } = props;
-  const rootPositions = [...Array(pieces * pieces).keys()];
-  const [positions, setPositions] = useState(shuffle(rootPositions));
-    // const [positions, setPositions] = useState(rootPositions);
-
+  const rootPositions = [...Array(piecesX * piecesY).keys()];
+  console.log(rootPositions);
+  const [positions, setPositions] = useState(rootPositions);
+  
   console.log(positions);
   const coords = rootPositions.map((pos) => ({
-    x: Math.floor((pos % pieces) * (width / pieces)),
-    y: Math.floor(pos / pieces) * (height / pieces),
+    x: Math.floor((pos % piecesX) * (width / piecesX)),
+    y: Math.floor(pos / piecesX) * (height / piecesY),
   }));
 
   const onDropPiece = (sourcePosition, dropPosition) => {
@@ -47,6 +48,7 @@ const Puzzle = (props) => {
     ));
 
   return (
+    <div>
     <DndProvider backend={HTML5Backend}>
       <div style={puzzleWrapperStyles({ width, height })}>{renderPieces()}</div>
       <style>
@@ -57,6 +59,25 @@ const Puzzle = (props) => {
         `}
       </style>
     </DndProvider>
+    <div style={{ display: "flex", gap: 10 + "px" }}>
+        <button
+          onClick={() => setPositions(shuffle(rootPositions))}
+          className={s.Button}
+          style={{ paddingLeft: 50 + "px", paddingRight: 50 + "px" }}
+        >
+          Перемешать
+        </button>
+        <button
+          className={s.Button}
+          style={{ paddingLeft: 50 + "px", paddingRight: 50 + "px" }}
+        >
+          Сохранить
+        </button>
+      </div>
+      <button onClick={() => props.onSelectComponent("")} className={s.Button}>
+        Закрыть
+      </button>
+    </div>
   );
 };
 
