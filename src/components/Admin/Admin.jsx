@@ -34,14 +34,14 @@ const Admin = () => {
 
   return (
     <div className={s.Page}>
-      {difficulties.length == 0 ? (
-        <img src={loading}></img>
+      {difficulties.length === 0 ? (
+        <img src={loading} alt="puzzle"></img>
       ) : (
         <div className={s.Container}>
-          {component == "difficulty"
+          {component === "difficulty"
           ? <Difficulty onSelectComponent={handleComponent} difficulties={difficulties}/>
-          : component == "create"
-          ? <CreateGame onSelectComponent={handleComponent}/>
+          : component === "create"
+          ? <CreateGame onSelectComponent={handleComponent} difficulties={difficulties}/>
           : <Buttons onSelectComponent={handleComponent}/>
           }
         </div>
