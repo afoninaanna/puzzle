@@ -4,27 +4,14 @@ import { app, auth, database } from "../../firebase";
 import { getDatabase, ref, child, get, set, onValue } from "firebase/database";
 
 const Difficulty = (props) => {
-  const [state, setState] = useState([]);
+  const [state, setState] = useState(props.difficulties);
   const [difficulty, setDifficulty] = useState("");
-  const [numOfFragVertical, setNumOfFragVertical] = useState("");
-  const [numOfFragHorizontal, setNumOfFragHorizontal] = useState("");
+  const [numOfFragVertical, setNumOfFragVertical] = useState(0);
+  const [numOfFragHorizontal, setNumOfFragHorizontal] = useState(0);
   const [fragmentType, setFragmentType] = useState("");
   const [assemblyType, setAssemblyType] = useState("");
 
-  console.log("STATE")
-  console.log(state)
-  // console.log("difficulty")
-  // console.log(difficulty)
-  // console.log("numOfFragVertical")
-  // console.log(numOfFragVertical)
-  // console.log("numOfFragHorizontal")
-  // console.log(numOfFragHorizontal)
-  // console.log("fragmentType")
-  // console.log(fragmentType)
-  // console.log("assemblyType")
-  // console.log(assemblyType)
-
-  const changedDifficulty = (e) => {
+  const changeDifficulty = (e) => {
     setDifficulty(e)
     const currentDifficulty = state?.find((dif) => dif[0] === e);
     setNumOfFragVertical(currentDifficulty[1].numOfFragVertical)
@@ -33,11 +20,7 @@ const Difficulty = (props) => {
     setAssemblyType(currentDifficulty[1].assemblyType)
   }
 
-  useEffect(() => {
-    readFromDatabase();
-  }, []);
-
-  const readFromDatabase = () => {
+  const readDifficultyFromDatabase = () => {
     onValue(ref(database), (snapshot) => {
       setState([])
       const tempData = snapshot.val();
@@ -47,23 +30,12 @@ const Difficulty = (props) => {
         });
       }
     });
-
-    // const dbRef = ref(getDatabase());
-    // get(child(dbRef, `difficulty`)).then((snapshot) => {
-    //   if (snapshot.exists()) {
-    //     const tempData = snapshot.val();
-    //     if (tempData) {
-    //       Object.entries(tempData).map((difficulty) => {
-    //         setState((oldArray) => [...oldArray, difficulty]);
-    //       });
-    //     }
-    //   } else {
-    //     console.log("No data available");
-    //   }
-    // }).catch((error) => {
-    //   console.error(error);
-    // });
   }
+
+  useEffect(() => {
+    changeDifficulty(state[0][0])
+    readDifficultyFromDatabase()
+  }, []);
 
   const writeToDatabase = () => {
     set(ref(database, `difficulty/${difficulty}`), {
@@ -83,7 +55,7 @@ const Difficulty = (props) => {
         <p>Выбор уровня сложности</p>
         <select
           value={difficulty}
-          onChange={(e) => changedDifficulty(e.target.value)}
+          onChange={(e) => changeDifficulty(e.target.value)}
         >
           {state.map((state) => (
             <option>{state[0]}</option>
