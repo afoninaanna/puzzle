@@ -20,6 +20,7 @@ const Register = () => {
           <div className={s.Field}>
             <p>Email</p>
             <input
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               type='email'
@@ -30,11 +31,16 @@ const Register = () => {
           <div className={s.Field}>
             <p>Пароль</p>
             <input
+              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               type='password'
               placeholder='Введите пароль'
               className={s.Input} />
+            {password.length < 6 ? (
+              <span style={{ fontSize: 12 }}>Пароль должен содержать минимум 6 символов</span>)
+              : (<span></span>)
+            }
           </div>
         <button onClick={register} className={s.Register}>Зарегистрироваться</button>
         <p className={s.Login}>

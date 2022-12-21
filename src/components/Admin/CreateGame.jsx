@@ -100,29 +100,46 @@ const CreateGame = (props) => {
           ))}
         </select>
       </form>
-      <div className={s.Puzzle}>
-        <Puzzle
-          image={image}
-          width={540}
-          height={400}
-          piecesX={numOfFragHorizontal}
-          piecesY={numOfFragVertical}
-          onComplete={onComplete}
-          onPos={handlePos}
-        />
-        <div className={s.Tape}></div>
-          <button
-            onClick={() => props.onSelectComponent("")}
-            className={s.Button}
-            style={{
-              marginTop: 55 + "px",
-              paddingLeft: 50 + "px",
-              paddingRight: 50 + "px",
-            }}
-          >
-            Закрыть
-          </button>
-      </div>
+      {
+        (puzzleName && imageUrl)? (
+          <div className={s.Puzzle}>
+            <Puzzle
+              image={image}
+              width={540}
+              height={400}
+              piecesX={numOfFragHorizontal}
+              piecesY={numOfFragVertical}
+              onComplete={onComplete}
+              onPos={handlePos}
+            />
+            <div className={s.Tape}></div>
+            <button
+              onClick={() => props.onSelectComponent("")}
+              className={s.Button}
+              style={{
+                marginTop: 55 + "px",
+                paddingLeft: 50 + "px",
+                paddingRight: 50 + "px",
+              }}
+            >
+              Закрыть
+            </button>
+          </div>
+        ) : (
+            <button
+              onClick={() => props.onSelectComponent("")}
+              className={s.Button}
+              style={{
+                marginTop: 55 + "px",
+                paddingLeft: 50 + "px",
+                paddingRight: 50 + "px",
+              }}
+            >
+              Закрыть
+            </button>
+        )
+
+      }
     </div>
   );
 }

@@ -92,3 +92,9 @@
 .Register a:hover{
     color: #71b696;
 }
+.Field input:invalid {
+    border: 2px dashed red;
+}
+.Field input:valid {
+    border: 2px dashed black;
+}
