@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import s from './style.module.css';
-import Puzzle from '../PuzzleLib/Puzzle'
+import Puzzle from '../PuzzleLib/PuzzleSquareAdmin'
 import { app, auth, database, storage } from "../../firebase";
 import { ref, get, set, onValue } from "firebase/database";
 import { uploadBytes, ref as sRef, getDownloadURL } from "firebase/storage";
@@ -29,7 +29,11 @@ const CreateGame = (props) => {
             set(ref(database, `puzzles/${puzzleName}`), {
               difficulty,
               image: url,
-              positions: value
+              positions: value,
+              numOfFragVertical,
+              numOfFragHorizontal,
+              assemblyType,
+              fragmentType,
             });
       });
     })
@@ -45,7 +49,7 @@ const CreateGame = (props) => {
     }
     setImageUrl(event.target.files[0]);
   };
-
+  
   const changeDifficulty = (e) => {
     setDifficulty(e);
     const currentDifficulty = state?.find((dif) => dif[0] === e);

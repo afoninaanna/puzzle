@@ -1,8 +1,11 @@
-body{
+root{
     background-color: white;
 }
 .Page{
     display: grid;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
     grid-template-areas: 
     "p p"
     "c t";
@@ -55,12 +58,18 @@ body{
     cursor: pointer;
     background-color: #71b696;
 }
+.Puzzle{
+    display: grid;
+    grid-template-areas: 
+    "c t";
+    grid-template-rows: 400px;
+    justify-content: center;
+    column-gap: 2%;
+}
 .Canvas{
     grid-area: c;
 }
 .Canvas div{
-    width: 100%;
-    height: 100%;
     border: 1px solid #ccc;
 }
 .Tape{
