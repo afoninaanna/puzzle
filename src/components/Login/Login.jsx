@@ -24,7 +24,9 @@ const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
             type='email' 
             placeholder='Введите логин'
-            className={s.Input} />
+            className={s.Input} 
+            required
+            />
         </div>
         <br/>
         <div className={s.Field}>
@@ -34,7 +36,12 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
             type='password' 
             placeholder='Введите пароль'
-            className={s.Input} />
+            className={s.Input}
+            required />
+          {password.length < 6? (
+            <span style={{fontSize: 12}}>Пароль должен содержать минимум 6 символов</span>)
+            : (<span></span>)
+          }
         </div>
         <button onClick={logIn} className={s.Login}>Войти</button>
         <p className={s.Register}>
