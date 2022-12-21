@@ -73,7 +73,7 @@ const Difficulty = (props) => {
           max="10"
           min="4"
           value={numOfFragVertical}
-          onChange={(e) => setNumOfFragVertical(e.target.value)}
+          onChange={(e) => setNumOfFragVertical(Number(e.target.value))}
         ></input>
       </form>
       <form className={s.Field}>
@@ -87,7 +87,7 @@ const Difficulty = (props) => {
           max="10"
           min="4"
           value={numOfFragHorizontal}
-          onChange={(e) => setNumOfFragHorizontal(e.target.value)}
+          onChange={(e) => setNumOfFragHorizontal(Number(e.target.value))}
         ></input>
       </form>
       <form className={s.Field}>

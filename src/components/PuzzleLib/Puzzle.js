@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
@@ -8,16 +8,23 @@ import Piece from './Piece';
 import s from './../Admin/style.module.css';
 
 const Puzzle = (props) => {
-  const { width, height, pieces, piecesX, piecesY, onComplete } = props;
+  useEffect(() => {
+    setPositions(rootPositions);
+  }, [props]);
+
+  const { width, height, piecesX, piecesY, onComplete } = props;
   const rootPositions = [...Array(piecesX * piecesY).keys()];
-  console.log(rootPositions);
   const [positions, setPositions] = useState(rootPositions);
-  
-  console.log(positions);
+
   const coords = rootPositions.map((pos) => ({
     x: Math.floor((pos % piecesX) * (width / piecesX)),
     y: Math.floor(pos / piecesX) * (height / piecesY),
   }));
+
+  const handlePos = () => {
+    var pos = positions;
+    props.onPos(pos);
+  };
 
   const onDropPiece = (sourcePosition, dropPosition) => {
     const oldPositions = positions.slice();
@@ -44,22 +51,30 @@ const Puzzle = (props) => {
 
   const renderPieces = () =>
     positions.map((i) => (
-      <Piece key={i} position={i} onDropPiece={onDropPiece} {...coords[i]} {...props} />
+      <Piece
+        key={i}
+        position={i}
+        onDropPiece={onDropPiece}
+        {...coords[i]}
+        {...props}
+      />
     ));
 
   return (
     <div>
-    <DndProvider backend={HTML5Backend}>
-      <div style={puzzleWrapperStyles({ width, height })}>{renderPieces()}</div>
-      <style>
-        {`
+      <DndProvider backend={HTML5Backend}>
+        <div style={puzzleWrapperStyles({ width, height })}>
+          {renderPieces()}
+        </div>
+        <style>
+          {`
           .puzzle-piece:hover {
             opacity: 0.8;
           }
         `}
-      </style>
-    </DndProvider>
-    <div style={{ display: "flex", gap: 10 + "px" }}>
+        </style>
+      </DndProvider>
+      <div style={{display: "flex", gap: 10+"px"}}>
         <button
           onClick={() => setPositions(shuffle(rootPositions))}
           className={s.Button}
@@ -69,14 +84,16 @@ const Puzzle = (props) => {
         </button>
         <button
           className={s.Button}
-          style={{ paddingLeft: 50 + "px", paddingRight: 50 + "px" }}
+          style={{
+            marginTop: 10 + "px",
+            paddingLeft: 50 + "px",
+            paddingRight: 50 + "px",
+          }}
+          onClick={handlePos}
         >
           Сохранить
         </button>
       </div>
-      <button onClick={() => props.onSelectComponent("")} className={s.Button}>
-        Закрыть
-      </button>
     </div>
   );
 };
@@ -85,16 +102,16 @@ Puzzle.propTypes = {
   image: PropTypes.string.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
-  pieces: PropTypes.number,
-  piecesCompleted: (props) =>
-    props['pieces'] < 3 && new Error('Invalid prop type `pieces`. It should be >= 1'),
+  piecesY: PropTypes.number,
+  piecesX: PropTypes.number,
   onComplete: PropTypes.func,
 };
 
 Puzzle.defaultProps = {
   width: 400,
   height: 300,
-  pieces: 3,
+  piecesY: 4,
+  piecesX: 4,
   onComplete: () => {},
 };
 

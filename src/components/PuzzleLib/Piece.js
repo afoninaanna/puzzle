@@ -39,9 +39,10 @@ Piece.propTypes = {
   image: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  pieces: PropTypes.number.isRequired,
+  piecesX: PropTypes.number.isRequired,
+  piecesY: PropTypes.number.isRequired,
   position: PropTypes.number.isRequired,
-  onDropPiece: PropTypes.func.isRequired
+  onDropPiece: PropTypes.func.isRequired,
 };
 
 export default Piece;
