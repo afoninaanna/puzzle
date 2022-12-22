@@ -10,7 +10,8 @@ import PuzzleSquareUser from "../PuzzleLib/PuzzleSquareUser";
 import Draggable from "react-draggable";
 import close from "../../img/close.svg"
 import Modal from '../Modal/Modal';
-
+import { Howl } from "howler";
+let audio = null;
 const Puzzle = () => {
   const location = useLocation();
   const [puzzleParams, setPuzzleParams] = useState(location.state.puzzleParams);
@@ -22,6 +23,21 @@ const Puzzle = () => {
     console.log("Puzzle is completed!");
     setVisible(true);
     clearTimeout(timerId)
+  };
+  
+  const soundClick = () => {
+    if (audio != null) {
+      audio.stop();
+      audio.unload();
+      audio = null;
+    } else {
+      audio = new Howl({
+        src: "/3d20874f20174bd.mp3",
+        loop: true,
+        volume: 0.5,
+      });
+      audio.play();
+    }
   };
 
   const hintClick = () => {
@@ -72,9 +88,9 @@ const Puzzle = () => {
             <p className={s.Time}>{formatTime.map((elem) => elem.slice(-2))}</p>
           ) : puzzleParams.countMethod == "На очки" ? (
             <p className={s.Score}>0</p>
-          ) : (null)}
+          ) : null}
         </div>
-        <div>
+        <div onClick={soundClick}>
           <img id="sound" src={soundOn}></img>
           <label htmlFor="sound">Звук</label>
         </div>
@@ -102,7 +118,9 @@ const Puzzle = () => {
         />
       </div>
       <div className={s.Tape}></div>
-      <Modal visible={visible} setVisible={setVisible}>{formatTime.map((elem) => elem.slice(-2))}</Modal>
+      <Modal visible={visible} setVisible={setVisible}>
+        {formatTime.map((elem) => elem.slice(-2))}
+      </Modal>
     </div>
   );
 }

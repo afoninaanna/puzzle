@@ -24,7 +24,6 @@ const UserSettings = () => {
     countMethod: "",
   });
 
-  console.log(puzzleParams);
   const changeDifficulty = (e) => {
     setDifficulty(e)
     setCurrentPuzzle([])
@@ -152,13 +151,17 @@ const UserSettings = () => {
               ))}
             </select>
           </form>
-          <Link
-            to={PUZZLE_ROUTE}
-            style={{ width: 100 + "%" }}
-            state={{ puzzleParams }}
-          >
-            <button className={s.Button}>Начать игру</button>
-          </Link>
+          {difficulty != "" &&
+          currentPuzzle != "" &&
+          puzzleParams.countMethod != "" ? (
+            <Link
+              to={PUZZLE_ROUTE}
+              style={{ width: 100 + "%" }}
+              state={{ puzzleParams }}
+            >
+              <button className={s.Button}>Начать игру</button>
+            </Link>
+          ) : null}
           <button onClick={handleLogOut} className={s.Button}>
             Выйти из аккаунта
           </button>
