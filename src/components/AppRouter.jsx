@@ -7,7 +7,7 @@ const AppRouter = ({ user }) => {
         (
             <Routes>
                 {privateRoutes.map(({path, Component}) => (
-                    <Route key={Component} path={path} element={Component}/>
+                    <Route key={path} path={path} element={Component}/>
                 ))}
                 {user.uid=="M2AiQ0FhDqPFgEEPrWx1gvUrgVl1"
                 ? <Route path='*' element={<Navigate to={ADMIN_ROUTE} />} />
@@ -20,7 +20,7 @@ const AppRouter = ({ user }) => {
         (
             <Routes>
                 {publicRoutes.map(({ path, Component }) => (
-                    <Route key={Component} path={path} element={Component} />
+                    <Route key={path} path={path} element={Component} />
                 ))}
                 <Route path='*' element={<Navigate to={LOGIN_ROUTE} />} />
             </Routes>

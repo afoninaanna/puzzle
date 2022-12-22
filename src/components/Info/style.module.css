@@ -1,0 +1,50 @@
+.Page{
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    flex-flow: row nowrap;
+    background-color: #6d7370;
+}
+.Page::before, .Page::after {
+    content: '';  /* Insert pseudo-element */
+    margin: auto; /* Make it push flex items to the center */
+}
+.Container{
+    padding-top: 5vh;
+    padding-bottom: 5vh;
+    padding-left: 3vw;
+    padding-right: 3vw;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    box-shadow: 0 0 10px -5px #1d2120;
+}
+.Field{
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.Field select{
+    width: auto;
+}
+.Button{
+    width: 100%;
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20%;
+    padding-right: 20%;
+    background-color: #a4c4b5;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    transition: all 0.3s;
+}
+.Button:hover{
+    cursor: pointer;
+    background-color: #71b696;
+}
