@@ -16,12 +16,13 @@ const onComplete = () => {
 
 
 
+
 const Puzzle = () => {
 
   const location = useLocation();
   const [puzzleParams, setPuzzleParams] = useState(location.state.puzzleParams);
   const [displayHint, setDisplayHint] = useState("none");
-
+  console.log(location);
   const hintClick = () => {
     if (displayHint=="flex"){
       setDisplayHint("none")
@@ -41,15 +42,18 @@ const Puzzle = () => {
         defaultPosition={{ x: 400, y: 100 }}
         bounds={{ left: 0, top: 0, right: 1100, bottom: 600 }}
       >
-        <div className={s.Hint} style={{ display: displayHint, zIndex: 100}}>
+        <div className={s.Hint} style={{ display: displayHint, zIndex: 99 }}>
           <img className={s.HintImg} src={puzzleParams.imageUrl}></img>
           <img onClick={hintClick} className={s.Close} src={close}></img>
         </div>
       </Draggable>
       <div className={s.Params}>
         <div>
-          <p className={s.Time}>00:00:00</p>
-          {/* <p className={s.Score}>0</p> */}
+          {puzzleParams.countMethod == "На время" ? (
+            <p className={s.Time}>00:00:00</p>
+          ) : puzzleParams.countMethod == "На очки" ? (
+            <p className={s.Score}>0</p>
+          ) : (null)}
         </div>
         <div>
           <img id="sound" src={soundOn}></img>

@@ -10,7 +10,6 @@ const onComplete = () => {
 };
 
 const CreateGame = (props) => {
-
   const [state, setState] = useState(props.difficulties);
   const [difficulty, setDifficulty] = useState("");
   const [image, setImage] = useState("");

@@ -21,13 +21,22 @@ const UserSettings = () => {
     assemblyType: "",
     imageUrl: "",
     positions: [],
+    countMethod: "",
   });
 
-
+  console.log(puzzleParams);
   const changeDifficulty = (e) => {
     setDifficulty(e)
     setCurrentPuzzle([])
-    setPuzzleParams({})
+    setPuzzleParams({
+      ...puzzleParams,
+      numOfFragVertical: 0,
+      numOfFragHorizontal: 0,
+      fragmentType: "",
+      assemblyType: "",
+      imageUrl: "",
+      positions: [],
+    });
     const currentDifficulty = difficulties?.find((difficulty) => difficulty[0] === e);
     const curPuzzles = puzzles?.filter(
       (puzzle) => puzzle[1].difficulty === currentDifficulty[0]
@@ -105,13 +114,24 @@ const UserSettings = () => {
           <form action="" className={s.Field}>
             <p>Выбор игры</p>
             <select>
+              <option defaultValue disabled></option>
               <option>Новая</option>
               <option>Существующая</option>
             </select>
           </form>
           <form className={s.Field}>
             <p>Способ подсчета результата</p>
-            <select>
+            <select
+              value={puzzleParams.countMethod}
+              onChange={(e) =>
+                setPuzzleParams({
+                  ...puzzleParams,
+                  countMethod: e.target.value,
+                })
+              }
+              required
+            >
+              <option defaultValue disabled></option>
               <option>Не ведется</option>
               <option>На очки</option>
               <option>На время</option>
@@ -132,7 +152,11 @@ const UserSettings = () => {
               ))}
             </select>
           </form>
-          <Link to={PUZZLE_ROUTE} style={{ width: 100 + "%" }} state={{ puzzleParams }}>
+          <Link
+            to={PUZZLE_ROUTE}
+            style={{ width: 100 + "%" }}
+            state={{ puzzleParams }}
+          >
             <button className={s.Button}>Начать игру</button>
           </Link>
           <button onClick={handleLogOut} className={s.Button}>
