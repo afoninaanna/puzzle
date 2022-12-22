@@ -24,7 +24,6 @@ const UserSettings = () => {
     countMethod: "",
   });
 
-  console.log(puzzleParams);
   const changeDifficulty = (e) => {
     setDifficulty(e)
     setCurrentPuzzle([])
@@ -97,7 +96,9 @@ const UserSettings = () => {
         <img src={loading} alt="puzzle"></img>
       ) : (
         <div className={s.Container}>
-          <p style={{ marginBottom: 20 + "px" }}>Параметры игры «Puzzle»</p>
+          <p style={{ marginBottom: 20 + "px" }}>
+            <strong>Параметры игры «Puzzle»</strong>
+          </p>
           <form action="" className={s.Field}>
             <p>Выбор уровня сложности</p>
             <select
@@ -152,13 +153,17 @@ const UserSettings = () => {
               ))}
             </select>
           </form>
-          <Link
-            to={PUZZLE_ROUTE}
-            style={{ width: 100 + "%" }}
-            state={{ puzzleParams }}
-          >
-            <button className={s.Button}>Начать игру</button>
-          </Link>
+          {difficulty != "" &&
+          currentPuzzle != "" &&
+          puzzleParams.countMethod != "" ? (
+            <Link
+              to={PUZZLE_ROUTE}
+              style={{ width: 100 + "%" }}
+              state={{ puzzleParams }}
+            >
+              <button className={s.Button}>Начать игру</button>
+            </Link>
+          ) : null}
           <button onClick={handleLogOut} className={s.Button}>
             Выйти из аккаунта
           </button>
