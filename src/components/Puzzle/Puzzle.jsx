@@ -1,5 +1,5 @@
 import { signOut } from 'firebase/auth';
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useLocation } from "react-router-dom";
 import s from './style.module.css';
 import { auth } from '../../firebase';
@@ -9,20 +9,21 @@ import imageView from '../../img/imageView.svg'
 import PuzzleSquareUser from "../PuzzleLib/PuzzleSquareUser";
 import Draggable from "react-draggable";
 import close from "../../img/close.svg"
-
-const onComplete = () => {
-  console.log("Puzzle is completed!");
-};
-
-
-
+import Modal from '../Modal/Modal';
 
 const Puzzle = () => {
-
   const location = useLocation();
   const [puzzleParams, setPuzzleParams] = useState(location.state.puzzleParams);
   const [displayHint, setDisplayHint] = useState("none");
-  console.log(location);
+  const [time, setTime] = useState({seconds: 0, minutes: 0, hours: 0});
+  const [visible, setVisible] = useState(false);
+
+  const onComplete = () => {
+    console.log("Puzzle is completed!");
+    setVisible(true);
+    clearTimeout(timerId)
+  };
+
   const hintClick = () => {
     if (displayHint=="flex"){
       setDisplayHint("none")
@@ -32,6 +33,24 @@ const Puzzle = () => {
       setDisplayHint("none");
     }
   }
+  let timerId;
+  useEffect(() => {
+    timerId = setTimeout(() => setTime ({...time, seconds: time.seconds + 1}), 1000);
+    if (time.seconds === 60) {
+      setTime({...time, seconds: 0, minutes: time.minutes + 1});
+    }
+    if (time.minutes === 60) {
+      setTime({...time, minutes: 0, hours: time.hours + 1});
+    }
+  }, [time]);
+
+  const formatTime = [
+    '0' + time.hours,
+    ':',
+    '0' + time.minutes,
+    ':',
+    '0' + time.seconds
+  ]
 
   function handleLogOut() {
     signOut(auth);
@@ -50,7 +69,7 @@ const Puzzle = () => {
       <div className={s.Params}>
         <div>
           {puzzleParams.countMethod == "На время" ? (
-            <p className={s.Time}>00:00:00</p>
+            <p className={s.Time}>{formatTime.map((elem) => elem.slice(-2))}</p>
           ) : puzzleParams.countMethod == "На очки" ? (
             <p className={s.Score}>0</p>
           ) : (null)}
@@ -83,6 +102,7 @@ const Puzzle = () => {
         />
       </div>
       <div className={s.Tape}></div>
+      <Modal visible={visible} setVisible={setVisible}>{formatTime.map((elem) => elem.slice(-2))}</Modal>
     </div>
   );
 }
