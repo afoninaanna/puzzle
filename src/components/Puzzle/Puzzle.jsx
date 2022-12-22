@@ -7,21 +7,45 @@ import soundOn from '../../img/soundOn.svg'
 import save from '../../img/save.svg'
 import imageView from '../../img/imageView.svg'
 import PuzzleSquareUser from "../PuzzleLib/PuzzleSquareUser";
+import Draggable from "react-draggable";
+import close from "../../img/close.svg"
 
 const onComplete = () => {
   console.log("Puzzle is completed!");
 };
 
 
+
 const Puzzle = () => {
+
   const location = useLocation();
   const [puzzleParams, setPuzzleParams] = useState(location.state.puzzleParams);
+  const [displayHint, setDisplayHint] = useState("none");
+
+  const hintClick = () => {
+    if (displayHint=="flex"){
+      setDisplayHint("none")
+    } else if (displayHint == "none") {
+      setDisplayHint("flex");
+    } else {
+      setDisplayHint("none");
+    }
+  }
 
   function handleLogOut() {
     signOut(auth);
   }
   return (
     <div className={s.Page}>
+      <Draggable
+        defaultPosition={{ x: 400, y: 100 }}
+        bounds={{ left: 0, top: 0, right: 1100, bottom: 600 }}
+      >
+        <div className={s.Hint} style={{ display: displayHint, zIndex: 100}}>
+          <img className={s.HintImg} src={puzzleParams.imageUrl}></img>
+          <img onClick={hintClick} className={s.Close} src={close}></img>
+        </div>
+      </Draggable>
       <div className={s.Params}>
         <div>
           <p className={s.Time}>00:00:00</p>
@@ -35,7 +59,7 @@ const Puzzle = () => {
           <img id="save" src={save}></img>
           <label htmlFor="save">Сохранение</label>
         </div>
-        <div>
+        <div onClick={hintClick}>
           <img id="imageView" src={imageView}></img>
           <label htmlFor="imageView">Подсказка</label>
         </div>

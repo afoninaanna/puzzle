@@ -6,6 +6,7 @@
 }
 :root{
   --index: 26px;
+  overflow: hidden;
 }
 a{
   color: black;

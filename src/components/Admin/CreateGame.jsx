@@ -22,7 +22,6 @@ const CreateGame = (props) => {
   const [assemblyType, setAssemblyType] = useState("");
 
   const handlePos = (value) => {
-    console.log(value);
     const imageRef = sRef(storage, `puzzles/${puzzleName}`);
     uploadBytes(imageRef, imageUrl).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
