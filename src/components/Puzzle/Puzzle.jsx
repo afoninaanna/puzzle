@@ -9,20 +9,34 @@ import imageView from '../../img/imageView.svg'
 import PuzzleSquareUser from "../PuzzleLib/PuzzleSquareUser";
 import Draggable from "react-draggable";
 import close from "../../img/close.svg"
+import { Howl } from "howler";
 
 const onComplete = () => {
   console.log("Puzzle is completed!");
 };
 
-
-
+let audio = null;
 
 const Puzzle = () => {
-
   const location = useLocation();
   const [puzzleParams, setPuzzleParams] = useState(location.state.puzzleParams);
   const [displayHint, setDisplayHint] = useState("none");
-  console.log(location);
+
+  const soundClick = () => {
+    if (audio != null) {
+      audio.stop();
+      audio.unload();
+      audio = null;
+    } else {
+      audio = new Howl({
+        src: "/3d20874f20174bd.mp3",
+        loop: true,
+        volume: 0.5
+      });
+      audio.play();
+    }
+  };
+
   const hintClick = () => {
     if (displayHint=="flex"){
       setDisplayHint("none")
@@ -53,9 +67,9 @@ const Puzzle = () => {
             <p className={s.Time}>00:00:00</p>
           ) : puzzleParams.countMethod == "На очки" ? (
             <p className={s.Score}>0</p>
-          ) : (null)}
+          ) : null}
         </div>
-        <div>
+        <div onClick={soundClick}>
           <img id="sound" src={soundOn}></img>
           <label htmlFor="sound">Звук</label>
         </div>
