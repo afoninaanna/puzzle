@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import s from './style.module.css';
 import { auth } from '../../firebase';
 import soundOn from '../../img/soundOn.svg'
+import soundOff from '../../img/soundOff.svg'
 import save from '../../img/save.svg'
 import imageView from '../../img/imageView.svg'
 import PuzzleSquareUser from "../PuzzleLib/PuzzleSquareUser";
@@ -18,6 +19,7 @@ const Puzzle = () => {
   const [displayHint, setDisplayHint] = useState("none");
   const [time, setTime] = useState({seconds: 0, minutes: 0, hours: 0});
   const [visible, setVisible] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false)
 
   const onComplete = () => {
     console.log("Puzzle is completed!");
@@ -30,6 +32,7 @@ const Puzzle = () => {
       audio.stop();
       audio.unload();
       audio = null;
+      setIsPlaying(false)
     } else {
       audio = new Howl({
         src: "/3d20874f20174bd.mp3",
@@ -37,6 +40,7 @@ const Puzzle = () => {
         volume: 0.5,
       });
       audio.play();
+      setIsPlaying(true)
     }
   };
 
@@ -83,7 +87,7 @@ const Puzzle = () => {
         </div>
       </Draggable>
       <div className={s.Params}>
-        <div>
+        <div style={{width: 80, cursor: "default"}}>
           {puzzleParams.countMethod == "На время" ? (
             <p className={s.Time}>{formatTime.map((elem) => elem.slice(-2))}</p>
           ) : puzzleParams.countMethod == "На очки" ? (
@@ -91,7 +95,7 @@ const Puzzle = () => {
           ) : null}
         </div>
         <div onClick={soundClick}>
-          <img id="sound" src={soundOn}></img>
+          <img id="sound" src={isPlaying? soundOn : soundOff}></img>
           <label htmlFor="sound">Звук</label>
         </div>
         <div>

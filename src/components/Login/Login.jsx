@@ -39,7 +39,7 @@ const Login = () => {
             className={s.Input}
             required />
           {password.length < 6? (
-            <span style={{fontSize: 12}}>Пароль должен содержать минимум 6 символов</span>)
+            <span style={{fontSize: 12}}>Пароль должен содержать<br/>минимум 6 символов</span>)
             : (<span></span>)
           }
         </div>

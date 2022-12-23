@@ -13,7 +13,6 @@ const AppRouter = ({ user }) => {
                 ? <Route path='*' element={<Navigate to={ADMIN_ROUTE} />} />
                 : <Route path='*' element={<Navigate to={USER_SETTINGS_ROUTE} />} />
                 }
-                 
             </Routes>
         )
         :
