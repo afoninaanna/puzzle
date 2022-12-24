@@ -96,7 +96,9 @@ const UserSettings = () => {
         <img src={loading} alt="puzzle"></img>
       ) : (
         <div className={s.Container}>
-          <p style={{ marginBottom: 20 + "px" }}>Параметры игры «Puzzle»</p>
+          <p style={{ marginBottom: 20 + "px" }}>
+            <strong>Параметры игры «Puzzle»</strong>
+          </p>
           <form action="" className={s.Field}>
             <p>Выбор уровня сложности</p>
             <select

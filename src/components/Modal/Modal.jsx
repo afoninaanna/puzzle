@@ -11,7 +11,7 @@ const Modal = ({visible, children}) => {
     return (
         <div className={s.Modal} style={{display: displayVisible}}>
             <div className={s.ModalContent} >
-                Пазл собран! Ваше время:  {children}
+                Пазл собран! {children}
                 <Link to={USER_SETTINGS_ROUTE}><button className={s.Button}>Завершить игру</button></Link>
             </div>      
         </div>

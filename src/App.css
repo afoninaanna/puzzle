@@ -4,9 +4,13 @@
   padding: 0;
   box-sizing: border-box;
 }
+html{
+  background-color:white;
+  height: 100%;
+}
 :root{
   --index: 26px;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 a{
   color: black;

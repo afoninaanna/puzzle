@@ -3,8 +3,8 @@ import s from "./style.module.css";
 
 const Help = () => {
   return (
-    <div className={s.Page}>
-      
+    <div style={{ backgroundColor: "white" }}>
+      <h1 id="top">Автоматизированная система «Puzzle» с функциями администратора</h1>
     </div>
   );
 };

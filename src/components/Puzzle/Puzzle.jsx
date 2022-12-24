@@ -12,6 +12,7 @@ import Draggable from "react-draggable";
 import close from "../../img/close.svg"
 import Modal from '../Modal/Modal';
 import { Howl } from "howler";
+
 let audio = null;
 const Puzzle = () => {
   const location = useLocation();
@@ -122,8 +123,8 @@ const Puzzle = () => {
         />
       </div>
       <div className={s.Tape}></div>
-      <Modal visible={visible} setVisible={setVisible}>
-        {formatTime.map((elem) => elem.slice(-2))}
+      <Modal visible={visible}>
+        {puzzleParams.countMethod === "На время" ? formatTime.map((elem) => elem.slice(-2)) : null}
       </Modal>
     </div>
   );
