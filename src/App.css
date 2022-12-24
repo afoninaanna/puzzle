@@ -10,7 +10,12 @@ html{
 }
 :root{
   --index: 26px;
-  /* overflow: hidden; */
+}
+body {
+  background-color: white;
+}
+.App{
+  font-family: 'Inter';
 }
 a{
   color: black;
@@ -24,9 +29,4 @@ a:hover{
 a:visited{
   color: black;
 }
-body {
-  background-color: white;
-}
-.App{
-  font-family: 'Inter';
-}
+
