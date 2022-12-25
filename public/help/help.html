@@ -1,20 +1,14 @@
-import React from "react";
-import s from "./style.module.css";
-import login from '../../../img/help/login.png'
-import reg from "../../../img/help/reg.png";
-import adminPanel from "../../../img/help/adminPanel.png";
-import adminPanelDifficulty from "../../../img/help/adminPanel_difficulty.png";
-import adminPanelGame from "../../../img/help/adminPanel_game.png";
-import gameSettings from "../../../img/help/gameSettings.png";
-import puzzleGame from '../../../img/help/puzzleGame.png'
-import eog from '../../../img/help/eog.png'
-
-
-const Help = () => {
-  return (
-    <div className={s.Help}>
-      <ul style={{ marginTop: 20 }}>
-        <li component="div">
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справка - «Puzzle»</title>
+</head>
+<body>
+      <ul>
+        <li>
           <a href="#h1_1">
             Автоматизированная система игра "Puzzle" с функцией
             администрирования
@@ -100,14 +94,14 @@ const Help = () => {
         необходимо ввести данные зарегестрированного пользователя и нажать
         кнопку "Войти".
       </p>
-      <img src={login} alt="Экранная форма авторизации" />
+      <img style="width: 60%; height: 30%;" src="./login.png" alt="Экранная форма авторизации" />
       <p>
         Если пользователь нажал на кнопку зарегистрироваться, то появляется окно
         регистрации, представленное на рисунке. В поля "Логин" и "Пароль"
         необходимо ввести данные нового пользователя и нажать кнопку
         "Зарегистрироваться".
       </p>
-      <img src={reg} alt="Экранная форма Регистрации" />
+      <img style="width: 60%; height: 30%;" src="./reg.png" alt="Экранная форма Регистрации" />
       <p>
         Если данные введены верно, то система выдаст форму настройки параметров
         для определенной роли.
@@ -151,7 +145,7 @@ const Help = () => {
         "Создать игру", "Выйти из аккаунта", на которые нужно нажать для
         открытия соответствующего экрана.
       </p>
-      <img src={adminPanel} alt="панель администратора" />
+      <img style="width: 60%; height: 30%;" src="./adminPanel.png" alt="панель администратора" />
       <h4 id="h4_2">Настройка уровня сложности</h4>
       <p>
         Данный раздел предназначен для настройки уровня сложности игры пазл, в
@@ -162,7 +156,7 @@ const Help = () => {
         уровня сложности и кнопку "Закрыть", чтобы вернуться на панель
         администратора.
       </p>
-      <img src={adminPanelDifficulty} alt=" экран настройки уровня сложности" />
+      <img style="width: 60%; height: 30%;" src="./adminPanel_difficulty.png" alt=" экран настройки уровня сложности" />
       <h4 id="h4_2_2">Создание игры</h4>
       <p>
         Для создания игры нужно ввести ее название, загрузить изображение для
@@ -173,7 +167,7 @@ const Help = () => {
         пользователя. Для возврата на панель администратора необходимо нажать
         кнопку "Закрыть".
       </p>
-      <img src={adminPanelGame} alt="экран создания игры" />
+      <img style="width: 60%; height: 30%;" src="./adminPanel_game.png" alt="экран создания игры" />
       <h2 id="h2_3">Режим игрока</h2>
       <p>
         При авторизации в качестве игрока пользователю отображается страница
@@ -188,7 +182,8 @@ const Help = () => {
         (не ведется, на очки, на время).
       </p>
       <img
-        src={gameSettings}
+        style="width: 60%; height: 30%;"
+        src="./gameSettings.png"
         alt="Экранная форма настройки параметров игры у игрока"
       />
       <p>
@@ -218,8 +213,8 @@ const Help = () => {
         авторизации.
       </p>
       <img
-        style={{ borderWidth: 1, borderColor: "#00000", borderStyle: "solid" }}
-        src={puzzleGame}
+        style="width: 60%; height: 30%; border-width: 1px; border-style: solid;"
+        src="./puzzleGame.png"
         alt="Экранная форма игры «Puzzle»"
       />
       <p>
@@ -227,7 +222,7 @@ const Help = () => {
         поздравлением и итоговым результатом, если был задан параметр (на очки
         или на время).
       </p>
-      <img src={eog} alt="Модальное окно завершения игры" />
+      <img style="width: 60%; height: 30%;" src="./eog.png" alt="Модальное окно завершения игры" />
       <p>
         После нажатия на копку "Завершить игру" пользователь попадёт на экран
         настройки параметров игры.
@@ -246,8 +241,5 @@ const Help = () => {
         Выход из программы осуществляется закрытием вкладки с приложением в
         браузере
       </p>
-    </div>
-  );
-};
-
-export default Help;
+</body>
+</html>
