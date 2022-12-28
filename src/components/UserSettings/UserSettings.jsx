@@ -8,91 +8,126 @@ import loading from "../../img/loading.gif";
 import { getDatabase, ref, child, get, set, onValue } from "firebase/database";
 
 const UserSettings = () => {
-  const [difficulties, setDifficulties] = useState([]);
-  const [difficulty, setDifficulty] = useState("");
-  const [puzzles, setPuzzles] = useState([])
-  const [puzzlesForCurrentDifficulty, setPuzzlesForCurrentDifficulty] = useState([]);
-  const [currentPuzzle, setCurrentPuzzle] = useState("");
+  const [difficulties, setDifficulties] = useState([]); //Это все уровни сложности
+  const [puzzles, setPuzzles] = useState([]); //Это пазлы которые сохранял администратор
+  const [savedPuzzles, setSavedPuzzles] = useState([]); //Это пазлы которые сохраняли пользователи
 
-  const [puzzleParams, setPuzzleParams] = useState({
-    numOfFragVertical: 0,
-    numOfFragHorizontal: 0,
-    fragmentType: "",
-    assemblyType: "",
-    imageUrl: "",
-    positions: [],
-    countMethod: "",
-  });
+  const [currentDifficulty, setCurrentDifficulty] = useState(""); //Это выбранная сложность
+  const [gameType, setGameType] = useState(""); //Это выбранный тип игры
 
-  const changeDifficulty = (e) => {
-    setDifficulty(e)
-    setCurrentPuzzle([])
-    setPuzzleParams({
-      ...puzzleParams,
-      numOfFragVertical: 0,
-      numOfFragHorizontal: 0,
-      fragmentType: "",
-      assemblyType: "",
-      imageUrl: "",
-      positions: [],
-    });
-    const currentDifficulty = difficulties?.find((difficulty) => difficulty[0] === e);
-    const curPuzzles = puzzles?.filter(
-      (puzzle) => puzzle[1].difficulty === currentDifficulty[0]
-    );
-    setPuzzlesForCurrentDifficulty(curPuzzles);
-  };
+  const [currentPuzzles, setCurrentPuzzles] = useState([]); // Это все пазлы по выбранному уровню сложности и типу игры
+  const [currentPuzzle, setCurrentPuzzle] = useState(""); // Это выбранный пазл в выпадающем списке
 
-  const readDifficultyFromDatabase = () => {
+  const [puzzleParams, setPuzzleParams] = useState({})
+
+  const [countMethod, setCountMethod] = useState("")
+  console.log(puzzleParams);
+
+  const readDataFromDatabase = () => {
+    setDifficulties([]);
+    setPuzzles([]);
+    setSavedPuzzles([]);
     onValue(ref(database), (snapshot) => {
-      setPuzzles([]);
-      setDifficulties([]);
       const tempData = snapshot.val();
-      if (tempData) {
-        Object.entries(tempData.difficulty).map((difficulty) => {
-          setDifficulties((oldArray) => [...oldArray, difficulty]);
-        });
-        Object.entries(tempData.puzzles).map((puzzle) => {
-          setPuzzles((oldArray) => [...oldArray, puzzle]);
-        });
-      }
+      Object.entries(tempData.difficulty).map((difficulty) => {
+        setDifficulties((oldArray) => [...oldArray, difficulty]);
+      });
+      Object.entries(tempData.puzzles).map((difficulty) => {
+        setPuzzles((oldArray) => [...oldArray, difficulty]);
+      });
+      Object.entries(tempData.savedPuzzle).map((savedPuzzle) => {
+        setSavedPuzzles((oldArray) => [...oldArray, savedPuzzle]);
+      });
     });
   };
+
+  useEffect(() => {
+    readDataFromDatabase();
+  }, []);
+
+  useEffect(() => {
+    setPuzzleParams({})
+    setCurrentPuzzles([]);
+    setCurrentPuzzle("");
+    try {
+      if (gameType == "Новая") {
+        const curPuzzles = puzzles?.filter(
+          (puzzle) => puzzle[1].difficulty === currentDifficulty
+        );
+        setCurrentPuzzles(curPuzzles);
+        // console.log("НОВАЯ");
+      } else if (gameType == "Существующая") {
+        let uid = auth.currentUser.uid;
+        const curUser = savedPuzzles?.filter((user) => user[0] === uid);
+        const curPuzzles = Object.entries(curUser[0][1])?.filter(
+          (puzzle) => puzzle[1].difficulty === currentDifficulty
+        );
+        setCurrentPuzzles(curPuzzles);
+        // console.log("СУЩЕСТВУЮЩАЯ");
+      }
+    } catch (e) {
+      alert("Существующие игры отсутствуют");
+    }
+  }, [currentDifficulty, gameType]);
 
   const getPuzzleParams = (e) => {
-    const puzzleData = puzzlesForCurrentDifficulty.filter(
-      (puzzle) => puzzle[0] === currentPuzzle
-    );
-    if(currentPuzzle!=""){
-      if(puzzleData){
-        setPuzzleParams({
-          ...puzzleParams,
-          assemblyType: puzzleData[0][1].assemblyType,
-          fragmentType: puzzleData[0][1].fragmentType,
-          numOfFragHorizontal: puzzleData[0][1].numOfFragHorizontal,
-          numOfFragVertical: puzzleData[0][1].numOfFragVertical,
-          imageUrl: puzzleData[0][1].image,
-          positions: puzzleData[0][1].positions,
-        });
+    try {
+      if (gameType == "Новая") {
+        const puzzleData = puzzles.filter(
+          (puzzle) => puzzle[0] === currentPuzzle
+        );
+        if (currentPuzzle != "") {
+          if (puzzleData) {
+            setPuzzleParams({
+              ...puzzleParams,
+              difficulty: puzzleData[0][1].difficulty,
+              assemblyType: puzzleData[0][1].assemblyType,
+              fragmentType: puzzleData[0][1].fragmentType,
+              numOfFragHorizontal: puzzleData[0][1].numOfFragHorizontal,
+              numOfFragVertical: puzzleData[0][1].numOfFragVertical,
+              imageUrl: puzzleData[0][1].image,
+              positions: puzzleData[0][1].positions,
+              countMethod,
+            });
+          }
+        }
+      } else if (gameType == "Существующая") {
+        let uid = auth.currentUser.uid;
+        const curUser = savedPuzzles?.filter((user) => user[0] === uid);
+        const puzzleData = Object.entries(curUser[0][1])?.filter(
+          (puzzle) => puzzle[0] === currentPuzzle
+        );
+        if (currentPuzzle != "") {
+          if (puzzleData) {
+            setPuzzleParams({
+              ...puzzleParams,
+              difficulty: puzzleData[0][1].difficulty,
+              assemblyType: puzzleData[0][1].assemblyType,
+              fragmentType: puzzleData[0][1].fragmentType,
+              numOfFragHorizontal: puzzleData[0][1].numOfFragHorizontal,
+              numOfFragVertical: puzzleData[0][1].numOfFragVertical,
+              imageUrl: puzzleData[0][1].image,
+              positions: puzzleData[0][1].positions,
+              countMethod,
+            });
+          }
+        }
       }
+    } catch (e) {
+      alert("Существующие игры отсутствуют");
     }
   }
 
   useEffect(() => {
     getPuzzleParams(currentPuzzle);
-  }, [currentPuzzle]);
-
-  useEffect(() => {
-    readDifficultyFromDatabase();
-  }, [])
-
+  }, [currentPuzzle, countMethod]);
 
   function handleLogOut() {
     signOut(auth);
   }
   return (
     <div className={s.Page}>
-      {difficulties.length === 0 ? (
+      {difficulties.length == 0 ? (
         <img src={loading} alt="puzzle"></img>
       ) : (
         <div className={s.Container}>
@@ -102,8 +137,8 @@ const UserSettings = () => {
           <form action="" className={s.Field}>
             <p>Выбор уровня сложности</p>
             <select
-              value={difficulty}
-              onChange={(e) => changeDifficulty(e.target.value)}
+              value={currentDifficulty}
+              onChange={(e) => setCurrentDifficulty(e.target.value)}
               required
             >
               <option defaultValue disabled></option>
@@ -112,9 +147,13 @@ const UserSettings = () => {
               ))}
             </select>
           </form>
-          <form action="" className={s.Field}>
+          <form className={s.Field}>
             <p>Выбор игры</p>
-            <select>
+            <select
+              value={gameType}
+              onChange={(e) => setGameType(e.target.value)}
+              required
+            >
               <option defaultValue disabled></option>
               <option>Новая</option>
               <option>Существующая</option>
@@ -123,13 +162,8 @@ const UserSettings = () => {
           <form className={s.Field}>
             <p>Способ подсчета результата</p>
             <select
-              value={puzzleParams.countMethod}
-              onChange={(e) =>
-                setPuzzleParams({
-                  ...puzzleParams,
-                  countMethod: e.target.value,
-                })
-              }
+              value={countMethod}
+              onChange={(e) => setCountMethod(e.target.value)}
               required
             >
               <option defaultValue disabled></option>
@@ -142,18 +176,16 @@ const UserSettings = () => {
             <p>Игра</p>
             <select
               value={currentPuzzle}
-              onChange={function (e) {
-                setCurrentPuzzle(e.target.value);
-              }}
+              onChange={(e) => setCurrentPuzzle(e.target.value)}
               required
             >
               <option defaultValue disabled></option>
-              {puzzlesForCurrentDifficulty.map((puzzles) => (
-                <option>{puzzles[0]}</option>
+              {currentPuzzles.map((currentPuzzle) => (
+                <option>{currentPuzzle[0]}</option>
               ))}
             </select>
           </form>
-          {difficulty != "" &&
+          {currentDifficulty != "" &&
           currentPuzzle != "" &&
           puzzleParams.countMethod != "" ? (
             <Link
