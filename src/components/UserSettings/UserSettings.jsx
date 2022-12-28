@@ -6,6 +6,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { app, auth, database } from "../../firebase";
 import loading from "../../img/loading.gif";
 import { getDatabase, ref, child, get, set, onValue } from "firebase/database";
+import HelpButton from '../Info/HelpButton/HelpButton';
 
 const UserSettings = () => {
   const [difficulties, setDifficulties] = useState([]); //Это все уровни сложности
@@ -128,6 +129,7 @@ const UserSettings = () => {
         <img src={loading} alt="puzzle"></img>
       ) : (
         <div className={s.Container}>
+          <HelpButton />
           <p style={{ marginBottom: 20 + "px" }}>
             <strong>Параметры игры «Puzzle»</strong>
           </p>

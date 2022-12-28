@@ -6,6 +6,7 @@ import CreateGame from './CreateGame';
 import loading from '../../img/loading.gif'
 import { app, auth, database } from "../../firebase";
 import { getDatabase, ref, child, get, set, onValue } from "firebase/database";
+import HelpButton from '../Info/HelpButton/HelpButton';
 
 const Admin = () => {
   const [difficulties, setDifficulties] = useState([]);
@@ -38,6 +39,7 @@ const Admin = () => {
         <img src={loading} alt="puzzle"></img>
       ) : (
         <div className={s.Container}>
+          <HelpButton/>
           {component === "difficulty"
           ? <Difficulty onSelectComponent={handleComponent} difficulties={difficulties}/>
           : component === "create"
