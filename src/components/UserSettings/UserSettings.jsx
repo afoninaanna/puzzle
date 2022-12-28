@@ -21,7 +21,8 @@ const UserSettings = () => {
   const [puzzleParams, setPuzzleParams] = useState({})
 
   const [countMethod, setCountMethod] = useState("")
-  console.log(puzzleParams);
+
+  const uid = auth.currentUser.uid;
 
   const readDataFromDatabase = () => {
     setDifficulties([]);
@@ -55,15 +56,12 @@ const UserSettings = () => {
           (puzzle) => puzzle[1].difficulty === currentDifficulty
         );
         setCurrentPuzzles(curPuzzles);
-        // console.log("НОВАЯ");
       } else if (gameType == "Существующая") {
-        let uid = auth.currentUser.uid;
         const curUser = savedPuzzles?.filter((user) => user[0] === uid);
         const curPuzzles = Object.entries(curUser[0][1])?.filter(
           (puzzle) => puzzle[1].difficulty === currentDifficulty
         );
         setCurrentPuzzles(curPuzzles);
-        // console.log("СУЩЕСТВУЮЩАЯ");
       }
     } catch (e) {
       alert("Существующие игры отсутствуют");
@@ -92,7 +90,6 @@ const UserSettings = () => {
           }
         }
       } else if (gameType == "Существующая") {
-        let uid = auth.currentUser.uid;
         const curUser = savedPuzzles?.filter((user) => user[0] === uid);
         const puzzleData = Object.entries(curUser[0][1])?.filter(
           (puzzle) => puzzle[0] === currentPuzzle
@@ -148,15 +145,17 @@ const UserSettings = () => {
             </select>
           </form>
           <form className={s.Field}>
-            <p>Выбор игры</p>
+            <p>Выбор типа игры</p>
             <select
               value={gameType}
               onChange={(e) => setGameType(e.target.value)}
               required
             >
               <option defaultValue disabled></option>
-              <option>Новая</option>
-              <option>Существующая</option>
+              {puzzles ? <option>Новая</option> : null}
+              {savedPuzzles?.find((user) => user[0] === uid) ? (
+                <option>Существующая</option>
+              ) : null}
             </select>
           </form>
           <form className={s.Field}>
