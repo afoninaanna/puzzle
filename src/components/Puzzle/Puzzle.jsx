@@ -1,8 +1,10 @@
 import { signOut } from 'firebase/auth';
 import React, {useEffect, useState} from 'react'
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import s from './style.module.css';
-import { auth } from '../../firebase';
+import { onAuthStateChanged } from "firebase/auth";
+import { app, auth, database } from "../../firebase";
+import { getDatabase, ref, child, get, set, update, onValue } from "firebase/database";
 import soundOn from '../../img/soundOn.svg'
 import soundOff from '../../img/soundOff.svg'
 import save from '../../img/save.svg'
@@ -12,23 +14,66 @@ import Draggable from "react-draggable";
 import close from "../../img/close.svg"
 import Modal from '../Modal/Modal';
 import { Howl } from "howler";
+import { USER_SETTINGS_ROUTE } from "../../utils/consts";
 
-let audio = null;
+
+let audio = null, timerId;
 const Puzzle = () => {
   const location = useLocation();
   const [puzzleParams, setPuzzleParams] = useState(location.state.puzzleParams);
   const [displayHint, setDisplayHint] = useState("none");
   const [time, setTime] = useState({seconds: 0, minutes: 0, hours: 0});
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState({
+    modalSave: false,
+    modalEnd: false,
+  });
   const [isPlaying, setIsPlaying] = useState(false)
+  const [currentPositions, setCurrentPositions] = useState([])
+  const [savedPuzzleName, setSavedPuzzleName] = useState("")
 
-  const onComplete = () => {
-    console.log("Puzzle is completed!");
-    setVisible(true);
+  const handleCurrentPositions = (value) => { //Запоминание нынешних позиций фрагментов
+    setCurrentPositions(value);
+  };
+
+  const onComplete = () => { //При завершении пазла модальное окно
+    setVisible({...visible, modalEnd: true});
     clearTimeout(timerId)
   };
   
-  const soundClick = () => {
+  const writeToDatabase = () => { //Запись сохранения в БД
+    if (!currentPositions.length) {
+      set(
+        ref(
+          database,
+          `savedPuzzle/${auth.currentUser.uid}/${savedPuzzleName}`
+        ),
+        {
+          positions: puzzleParams.positions,
+        }
+      );
+    } else {
+      set(
+        ref(database, `savedPuzzle/${auth.currentUser.uid}/${savedPuzzleName}`),
+        {
+          positions: currentPositions,
+        }
+      );
+    }
+    update(
+      ref(database, `savedPuzzle/${auth.currentUser.uid}/${savedPuzzleName}`),
+      {
+        difficulty: puzzleParams.difficulty,
+        image: puzzleParams.imageUrl,
+        numOfFragVertical: puzzleParams.numOfFragVertical,
+        numOfFragHorizontal: puzzleParams.numOfFragHorizontal,
+        assemblyType: puzzleParams.assemblyType,
+        fragmentType: puzzleParams.fragmentType,
+      }
+    );
+    setVisible({...visible, modalSave: false})
+  }
+
+  const soundClick = () => { //Включение звукового сопровождения
     if (audio != null) {
       audio.stop();
       audio.unload();
@@ -45,7 +90,7 @@ const Puzzle = () => {
     }
   };
 
-  const hintClick = () => {
+  const hintClick = () => { //Подсказка
     if (displayHint=="flex"){
       setDisplayHint("none")
     } else if (displayHint == "none") {
@@ -54,8 +99,8 @@ const Puzzle = () => {
       setDisplayHint("none");
     }
   }
-  let timerId;
-  useEffect(() => {
+  
+  useEffect(() => { //timer
     timerId = setTimeout(() => setTime ({...time, seconds: time.seconds + 1}), 1000);
     if (time.seconds === 60) {
       setTime({...time, seconds: 0, minutes: time.minutes + 1});
@@ -73,9 +118,10 @@ const Puzzle = () => {
     '0' + time.seconds
   ]
 
-  function handleLogOut() {
+  function handleLogOut() { //logout
     signOut(auth);
   }
+
   return (
     <div className={s.Page}>
       <Draggable
@@ -88,7 +134,7 @@ const Puzzle = () => {
         </div>
       </Draggable>
       <div className={s.Params}>
-        <div style={{width: 80, cursor: "default"}}>
+        <div style={{ width: 80, cursor: "default" }}>
           {puzzleParams.countMethod == "На время" ? (
             <p className={s.Time}>{formatTime.map((elem) => elem.slice(-2))}</p>
           ) : puzzleParams.countMethod == "На очки" ? (
@@ -96,10 +142,10 @@ const Puzzle = () => {
           ) : null}
         </div>
         <div onClick={soundClick}>
-          <img id="sound" src={isPlaying? soundOn : soundOff}></img>
+          <img id="sound" src={isPlaying ? soundOn : soundOff}></img>
           <label htmlFor="sound">Звук</label>
         </div>
-        <div>
+        <div onClick={() => setVisible({ ...visible, modalSave: true })}>
           <img id="save" src={save}></img>
           <label htmlFor="save">Сохранение</label>
         </div>
@@ -120,11 +166,50 @@ const Puzzle = () => {
           piecesY={puzzleParams.numOfFragVertical}
           onComplete={onComplete}
           positions={puzzleParams.positions}
+          currentPos={handleCurrentPositions}
         />
       </div>
       <div className={s.Tape}></div>
-      <Modal visible={visible}>
-        {puzzleParams.countMethod === "На время" ? formatTime.map((elem) => elem.slice(-2)) : null}
+      <Modal visible={visible.modalSave}>
+        <div>
+          <input
+            type="text"
+            style={{
+              width: 100 + "%",
+              minWidth: 100,
+              borderWidth: "0 0 1px",
+              outline: "none",
+              backgroundSize: 18,
+              fontFamily: "Inter",
+              fontSize: "calc(var(--index) * 0.6)",
+              paddingBottom: 5,
+              marginTop: 5,
+              marginBottom: 5,
+              color: "#1d2120",
+              transition: 0.2 + "s",
+            }}
+            placeholder="Введите название сохранения"
+            value={savedPuzzleName}
+            onChange={(e) => setSavedPuzzleName(e.target.value)}
+          />
+          {savedPuzzleName ? (
+            <button className={s.Button} onClick={writeToDatabase}>
+              Сохранить
+            </button>
+          ) : null}
+          <button className={s.Button} onClick={()=>setVisible({...visible, modalSave: false})}>
+            Закрыть
+          </button>
+        </div>
+      </Modal>
+      <Modal visible={visible.modalEnd}>
+        <p>Пазл собран! </p>
+        {puzzleParams.countMethod === "На время"
+          ? formatTime.map((elem) => elem.slice(-2))
+          : null}
+        <Link to={USER_SETTINGS_ROUTE}>
+          <button className={s.Button}>Завершить игру</button>
+        </Link>
       </Modal>
     </div>
   );

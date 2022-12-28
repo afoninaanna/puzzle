@@ -17,9 +17,9 @@ const Puzzle = (props) => {
     y: Math.floor(pos / piecesX) * (height / piecesY),
   }));
 
-  const handlePos = () => {
+  const handleCurrentPositions = () => {
     var pos = positions;
-    props.onPos(pos);
+    props.currentPos(pos);
   };
 
   const onDropPiece = (sourcePosition, dropPosition) => {
@@ -39,6 +39,8 @@ const Puzzle = (props) => {
       newPositions.push(newValue);
     }
     setPositions(newPositions);
+
+    handleCurrentPositions();
 
     if (isEqual(rootPositions, newPositions)) {
       onComplete();

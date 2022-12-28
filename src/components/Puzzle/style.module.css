@@ -96,3 +96,20 @@
     top: 10px;
     right: 10px;
 }
+.Button{
+    width: 100%;
+    margin-top: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20%;
+    padding-right: 20%;
+    background-color: #a4c4b5;
+    border: none;
+    border-radius: 20px;
+    color: white;
+    transition: all 0.3s;
+}
+.Button:hover{
+    cursor: pointer;
+    background-color: #71b696;
+}
