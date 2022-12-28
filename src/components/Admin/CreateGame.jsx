@@ -34,6 +34,7 @@ const CreateGame = (props) => {
           fragmentType,
         });
         alert("Игра сохранена");
+        setPuzzleName("");
       });
     })
   };
