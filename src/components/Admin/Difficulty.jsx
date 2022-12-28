@@ -44,6 +44,7 @@ const Difficulty = (props) => {
       fragmentType,
       assemblyType,
     });
+    alert("Настройки сложности сохранены")
   };
 
   return (

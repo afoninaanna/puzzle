@@ -24,15 +24,16 @@ const CreateGame = (props) => {
     const imageRef = sRef(storage, `puzzles/${puzzleName}`);
     uploadBytes(imageRef, imageUrl).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
-            set(ref(database, `puzzles/${puzzleName}`), {
-              difficulty,
-              image: url,
-              positions: value,
-              numOfFragVertical,
-              numOfFragHorizontal,
-              assemblyType,
-              fragmentType,
-            });
+        set(ref(database, `puzzles/${puzzleName}`), {
+          difficulty,
+          image: url,
+          positions: value,
+          numOfFragVertical,
+          numOfFragHorizontal,
+          assemblyType,
+          fragmentType,
+        });
+        alert("Игра сохранена");
       });
     })
   };
