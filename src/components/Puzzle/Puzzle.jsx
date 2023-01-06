@@ -21,7 +21,24 @@ const Puzzle = () => {
   const location = useLocation();
   const [puzzleParams, setPuzzleParams] = useState(location.state.puzzleParams);
   const [displayHint, setDisplayHint] = useState("none");
-  const [time, setTime] = useState({seconds: 0, minutes: 0, hours: 0});
+  const [time, setTime] = useState(
+    puzzleParams.gameType == "Существующая" &&
+      puzzleParams.countMethod == "На время"
+      ? !puzzleParams.time
+        ? alert("Повреждённое сохранение (time error)")
+        : {
+            seconds: puzzleParams.time.seconds,
+            minutes: puzzleParams.time.minutes,
+            hours: puzzleParams.time.hours,
+          }
+      : { seconds: 0, minutes: 0, hours: 0 }
+  ); //Если игра существующая и на время, то ставится время из сохранения, иначе 00:00:00
+  const [score, setScore] = useState(
+    puzzleParams.gameType == "Существующая" &&
+      puzzleParams.countMethod == "На очки"
+      ? puzzleParams.score
+      : 0
+  );
   const [visible, setVisible] = useState({
     modalSave: false,
     modalEnd: false,
@@ -52,9 +69,25 @@ const Puzzle = () => {
         numOfFragHorizontal: puzzleParams.numOfFragHorizontal,
         assemblyType: puzzleParams.assemblyType,
         fragmentType: puzzleParams.fragmentType,
+        countMethod: puzzleParams.countMethod,
       }
     );
-    setVisible({...visible, modalSave: false})
+    if (puzzleParams.countMethod == "На время"){
+      update(
+        ref(database, `savedPuzzle/${auth.currentUser.uid}/${savedPuzzleName}`),
+        {
+          time,
+        }
+      );
+    } else if (puzzleParams.countMethod == "На очки"){
+      update(
+        ref(database, `savedPuzzle/${auth.currentUser.uid}/${savedPuzzleName}`),
+        {
+          score,
+        }
+      );
+    }
+      setVisible({ ...visible, modalSave: false });
   }
 
   const soundClick = () => {
@@ -88,12 +121,18 @@ const Puzzle = () => {
   
   useEffect(() => {
     //timer
-    timerId = setTimeout(() => setTime ({...time, seconds: time.seconds + 1}), 1000);
-    if (time.seconds === 60) {
-      setTime({...time, seconds: 0, minutes: time.minutes + 1});
-    }
-    if (time.minutes === 60) {
-      setTime({...time, minutes: 0, hours: time.hours + 1});
+    if (puzzleParams.countMethod == "На время") {
+      //Если игра на время, то запускается таймер, иначе не запускается
+      timerId = setTimeout(
+        () => setTime({ ...time, seconds: time.seconds + 1 }),
+        1000
+      );
+      if (time.seconds === 60) {
+        setTime({ ...time, seconds: 0, minutes: time.minutes + 1 });
+      }
+      if (time.minutes === 60) {
+        setTime({ ...time, minutes: 0, hours: time.hours + 1 });
+      }
     }
   }, [time]);
 
@@ -122,13 +161,11 @@ const Puzzle = () => {
         </div>
       </Draggable>
       <div className={s.Params}>
-        <div style={{ width: 80, cursor: "default" }}>
           {puzzleParams.countMethod == "На время" ? (
-            <p className={s.Time}>{formatTime.map((elem) => elem.slice(-2))}</p>
+            <div style={{ width: 80, cursor: "default" }}><p className={s.Time}>{formatTime.map((elem) => elem.slice(-2))}</p></div>
           ) : puzzleParams.countMethod == "На очки" ? (
-            <p className={s.Score}>0</p>
+            <div style={{ width: 80, cursor: "default" }}><p className={s.Score}>{score}</p></div>
           ) : null}
-        </div>
         <div onClick={soundClick}>
           <img id="sound" src={isPlaying ? soundOn : soundOff}></img>
           <label htmlFor="sound">Звук</label>
@@ -185,7 +222,10 @@ const Puzzle = () => {
               Сохранить
             </button>
           ) : null}
-          <button className={s.Button} onClick={()=>setVisible({...visible, modalSave: false})}>
+          <button
+            className={s.Button}
+            onClick={() => setVisible({ ...visible, modalSave: false })}
+          >
             Закрыть
           </button>
         </div>

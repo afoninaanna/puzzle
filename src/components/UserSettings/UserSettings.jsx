@@ -87,6 +87,7 @@ const UserSettings = () => {
               imageUrl: puzzleData[0][1].image,
               positions: puzzleData[0][1].positions,
               countMethod,
+              gameType,
             });
           }
         }
@@ -106,7 +107,12 @@ const UserSettings = () => {
               numOfFragVertical: puzzleData[0][1].numOfFragVertical,
               imageUrl: puzzleData[0][1].image,
               positions: puzzleData[0][1].positions,
-              countMethod,
+              countMethod: puzzleData[0][1].countMethod,
+              time: puzzleData[0][1].time
+                ? puzzleData[0][1].time
+                : null,
+              score: puzzleData[0][1].score ? puzzleData[0][1].score : 0,
+              gameType,
             });
           }
         }
@@ -160,7 +166,7 @@ const UserSettings = () => {
               ) : null}
             </select>
           </form>
-          <form className={s.Field}>
+          {gameType == "Новая" ?  <form className={s.Field}>
             <p>Способ подсчета результата</p>
             <select
               value={countMethod}
@@ -172,7 +178,8 @@ const UserSettings = () => {
               <option>На очки</option>
               <option>На время</option>
             </select>
-          </form>
+          </form> : null}
+         
           <form className={s.Field}>
             <p>Игра</p>
             <select
