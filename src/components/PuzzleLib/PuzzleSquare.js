@@ -7,12 +7,14 @@ import { shuffle, isEqual } from './utils';
 import Piece from './Piece';
 import s from './../Admin/style.module.css';
 
+let positionScore = []
 const Puzzle = (props) => {
   const { width, height, piecesX, piecesY, onComplete } = props;
   const rootPositions = [...Array(piecesX * piecesY).keys()];
   const [positions, setPositions] = useState(
     props.positions ? props.positions : rootPositions
   ); //Выбор изначальных позиций (из БД - если игрок, изначальные - если админ)
+
 
   const coords = rootPositions.map((pos) => ({
     x: Math.floor((pos % piecesX) * (width / piecesX)),
@@ -58,6 +60,22 @@ const Puzzle = (props) => {
       newPositions.push(newValue);
     }
     setPositions(newPositions);
+    if (
+      sourcePosition != dropPosition &&
+      newPositions[sourcePosition] == sourcePosition
+    ) {
+      positionScore.push(sourcePosition);
+      props.setScore(props.score + 10);
+    } else if (sourcePosition == dropPosition) {
+      props.setScore(props.score);
+    } else {
+      if(props.score < 5){
+        props.setScore(0)
+      } else {
+        props.setScore(props.score - 5);
+      }
+      
+    }
 
     if (isEqual(rootPositions, newPositions)) {
       onComplete();

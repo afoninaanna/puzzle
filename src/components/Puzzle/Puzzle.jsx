@@ -192,6 +192,8 @@ const Puzzle = () => {
           onComplete={onComplete}
           positions={puzzleParams.positions}
           currentPos={handleCurrentPositions}
+          score={score}
+          setScore={setScore}
         />
       </div>
       <div className={s.Tape}></div>
