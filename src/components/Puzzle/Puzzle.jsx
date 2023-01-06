@@ -28,40 +28,26 @@ const Puzzle = () => {
     modalEnd: false,
   });
   const [isPlaying, setIsPlaying] = useState(false)
-  const [currentPositions, setCurrentPositions] = useState([])
   const [savedPuzzleName, setSavedPuzzleName] = useState("")
 
-  const handleCurrentPositions = (value) => { //Запоминание нынешних позиций фрагментов
-    setCurrentPositions(value);
-  };
+  console.log(puzzleParams.positions);
 
   const onComplete = () => { //При завершении пазла модальное окно
     setVisible({...visible, modalEnd: true});
     clearTimeout(timerId)
   };
+
+  const handleCurrentPositions = (value) => {
+    //Запоминание нынешних позиций фрагментов
+    puzzleParams.positions = value;
+  };
   
-  const writeToDatabase = () => { //Запись сохранения в БД
-    if (!currentPositions.length) {
-      set(
-        ref(
-          database,
-          `savedPuzzle/${auth.currentUser.uid}/${savedPuzzleName}`
-        ),
-        {
-          positions: puzzleParams.positions,
-        }
-      );
-    } else {
-      set(
-        ref(database, `savedPuzzle/${auth.currentUser.uid}/${savedPuzzleName}`),
-        {
-          positions: currentPositions,
-        }
-      );
-    }
-    update(
+  const writeToDatabase = () => {
+    //Запись сохранения в БД
+    set(
       ref(database, `savedPuzzle/${auth.currentUser.uid}/${savedPuzzleName}`),
       {
+        positions: puzzleParams.positions,
         difficulty: puzzleParams.difficulty,
         image: puzzleParams.imageUrl,
         numOfFragVertical: puzzleParams.numOfFragVertical,
@@ -73,7 +59,8 @@ const Puzzle = () => {
     setVisible({...visible, modalSave: false})
   }
 
-  const soundClick = () => { //Включение звукового сопровождения
+  const soundClick = () => {
+    //Включение/выключение звукового сопровождения
     if (audio != null) {
       audio.stop();
       audio.unload();

@@ -1,6 +1,7 @@
 export const puzzleWrapperStyles = (props) => ({
     display: 'flex',
     flexWrap: 'wrap',
+    // alignContent: "flex-start", //надо проверить
     padding: 0,
     width: `${props.width}px`,
     height: `${props.height}px`

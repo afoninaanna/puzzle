@@ -40,13 +40,15 @@ const Puzzle = (props) => {
     }
     setPositions(newPositions);
 
-    handleCurrentPositions();
-
     if (isEqual(rootPositions, newPositions)) {
       onComplete();
     }
   };
 
+  useEffect(() => {
+    handleCurrentPositions();
+  }, [positions]);
+  
   const renderPieces = () =>
     positions.map((i) => (
       <Piece
