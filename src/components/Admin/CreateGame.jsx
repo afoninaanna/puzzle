@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import s from './style.module.css';
-import Puzzle from '../PuzzleLib/PuzzleSquareAdmin'
+import PuzzleSquare from '../PuzzleLib/PuzzleSquare'
 import { app, auth, database, storage } from "../../firebase";
 import { ref, get, set, onValue } from "firebase/database";
 import { uploadBytes, ref as sRef, getDownloadURL } from "firebase/storage";
@@ -14,20 +14,23 @@ const CreateGame = (props) => {
   const [difficulty, setDifficulty] = useState("");
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState(null);
+  const [positions, setPositions] = useState([]); // Позиции сгенерированного пазла
   const [puzzleName, setPuzzleName] = useState("");
   const [numOfFragVertical, setNumOfFragVertical] = useState(4);
   const [numOfFragHorizontal, setNumOfFragHorizontal] = useState(4);
   const [fragmentType, setFragmentType] = useState("");
   const [assemblyType, setAssemblyType] = useState("");
+  const [isShuffled, setIsShuffled] = useState(false)
 
-  const handlePos = (value) => {
+  const writeToDatabase = () => {
+    //Запись игры в БД
     const imageRef = sRef(storage, `puzzles/${puzzleName}`);
     uploadBytes(imageRef, imageUrl).then((snapshot) => {
       getDownloadURL(snapshot.ref).then((url) => {
         set(ref(database, `puzzles/${puzzleName}`), {
           difficulty,
           image: url,
-          positions: value,
+          positions: positions,
           numOfFragVertical,
           numOfFragHorizontal,
           assemblyType,
@@ -36,7 +39,12 @@ const CreateGame = (props) => {
         alert("Игра сохранена");
         setPuzzleName("");
       });
-    })
+    });
+  };
+
+  const handleCurrentPositions = (value) => {
+    //Запоминание нынешних позиций фрагментов
+    setPositions(value);
   };
 
   const onImageChange = (event) => {
@@ -49,7 +57,7 @@ const CreateGame = (props) => {
     }
     setImageUrl(event.target.files[0]);
   };
-  
+
   const changeDifficulty = (e) => {
     setDifficulty(e);
     const currentDifficulty = state?.find((dif) => dif[0] === e);
@@ -104,46 +112,47 @@ const CreateGame = (props) => {
           ))}
         </select>
       </form>
-      {
-        (puzzleName && imageUrl)? (
-          <div className={s.Puzzle}>
-            <Puzzle
-              image={image}
-              width={540}
-              height={400}
-              piecesX={numOfFragHorizontal}
-              piecesY={numOfFragVertical}
-              onComplete={onComplete}
-              onPos={handlePos}
-            />
-            <div className={s.Tape}></div>
+      {puzzleName && imageUrl ? (
+        <div className={s.Puzzle}>
+          <PuzzleSquare
+            image={image}
+            width={540}
+            height={400}
+            piecesX={numOfFragHorizontal}
+            piecesY={numOfFragVertical}
+            onComplete={onComplete}
+            currentPos={handleCurrentPositions}
+            isShuffled={isShuffled}
+            setIsShuffled={setIsShuffled}
+            difficulty={difficulty}
+          />
+          <div className={s.Tape}></div>
+          <div style={{ display: "flex", gap: 10 + "px", gridArea: "b" }}>
             <button
-              onClick={() => props.onSelectComponent("")}
+              // onClick={() => setPositions(shuffle(rootPositions))}
+              className={s.Button}
+              style={{ paddingLeft: 50 + "px", paddingRight: 50 + "px" }}
+              onClick={() => setIsShuffled(true)}
+            >
+              Перемешать
+            </button>
+            <button
               className={s.Button}
               style={{
-                marginTop: 55 + "px",
+                marginTop: 10 + "px",
                 paddingLeft: 50 + "px",
                 paddingRight: 50 + "px",
               }}
+              onClick={writeToDatabase}
             >
-              Закрыть
+              Сохранить
             </button>
           </div>
-        ) : (
-            <button
-              onClick={() => props.onSelectComponent("")}
-              className={s.Button}
-              style={{
-                marginTop: 55 + "px",
-                paddingLeft: 50 + "px",
-                paddingRight: 50 + "px",
-              }}
-            >
-              Закрыть
-            </button>
-        )
-
-      }
+        </div>
+      ) : null}
+      <button onClick={() => props.onSelectComponent("")} className={s.Button}>
+        Закрыть
+      </button>
     </div>
   );
 }

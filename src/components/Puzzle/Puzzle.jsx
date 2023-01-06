@@ -9,13 +9,12 @@ import soundOn from '../../img/soundOn.svg'
 import soundOff from '../../img/soundOff.svg'
 import save from '../../img/save.svg'
 import imageView from '../../img/imageView.svg'
-import PuzzleSquareUser from "../PuzzleLib/PuzzleSquareUser";
+import PuzzleSquare from "../PuzzleLib/PuzzleSquare";
 import Draggable from "react-draggable";
 import close from "../../img/close.svg"
 import Modal from '../Modal/Modal';
 import { Howl } from "howler";
 import { USER_SETTINGS_ROUTE } from "../../utils/consts";
-
 
 let audio = null, timerId;
 const Puzzle = () => {
@@ -30,9 +29,8 @@ const Puzzle = () => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [savedPuzzleName, setSavedPuzzleName] = useState("")
 
-  console.log(puzzleParams.positions);
-
-  const onComplete = () => { //При завершении пазла модальное окно
+  const onComplete = () => {
+    //При завершении пазла модальное окно
     setVisible({...visible, modalEnd: true});
     clearTimeout(timerId)
   };
@@ -77,7 +75,8 @@ const Puzzle = () => {
     }
   };
 
-  const hintClick = () => { //Подсказка
+  const hintClick = () => {
+    //Подсказка
     if (displayHint=="flex"){
       setDisplayHint("none")
     } else if (displayHint == "none") {
@@ -87,7 +86,8 @@ const Puzzle = () => {
     }
   }
   
-  useEffect(() => { //timer
+  useEffect(() => {
+    //timer
     timerId = setTimeout(() => setTime ({...time, seconds: time.seconds + 1}), 1000);
     if (time.seconds === 60) {
       setTime({...time, seconds: 0, minutes: time.minutes + 1});
@@ -105,7 +105,8 @@ const Puzzle = () => {
     '0' + time.seconds
   ]
 
-  function handleLogOut() { //logout
+  function handleLogOut() {
+    //logout
     signOut(auth);
   }
 
@@ -145,7 +146,7 @@ const Puzzle = () => {
         </button>
       </div>
       <div className={s.Puzzle}>
-        <PuzzleSquareUser
+        <PuzzleSquare
           image={puzzleParams.imageUrl}
           width={810}
           height={600}

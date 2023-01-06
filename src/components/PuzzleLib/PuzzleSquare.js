@@ -8,22 +8,37 @@ import Piece from './Piece';
 import s from './../Admin/style.module.css';
 
 const Puzzle = (props) => {
-  useEffect(() => {
-    setPositions(rootPositions);
-  }, [props]);
-
   const { width, height, piecesX, piecesY, onComplete } = props;
   const rootPositions = [...Array(piecesX * piecesY).keys()];
-  const [positions, setPositions] = useState(rootPositions);
+  const [positions, setPositions] = useState(
+    props.positions ? props.positions : rootPositions
+  ); //Выбор изначальных позиций (из БД - если игрок, изначальные - если админ)
 
   const coords = rootPositions.map((pos) => ({
     x: Math.floor((pos % piecesX) * (width / piecesX)),
     y: Math.floor(pos / piecesX) * (height / piecesY),
   }));
 
-  const handlePos = () => {
+  //--- Ф-ии администратора ---//
+  useEffect(() => {
+    //При смене сложности фрагменты возвращаются в исходное положение
+    if(props.difficulty){
+      setPositions(rootPositions);
+    }
+  }, [props.difficulty]);
+
+  useEffect(() => {
+    //Для перемешивания фрагментов при нажатии на кнопку "Перемешать"
+    if (props.isShuffled) {
+      setPositions(shuffle(rootPositions));
+      props.setIsShuffled(false);
+    }
+  }, [props.isShuffled]);
+
+  //--- Ф-ии админа и игрока ---//
+  const handleCurrentPositions = () => {
     var pos = positions;
-    props.onPos(pos);
+    props.currentPos(pos);
   };
 
   const onDropPiece = (sourcePosition, dropPosition) => {
@@ -48,6 +63,10 @@ const Puzzle = (props) => {
       onComplete();
     }
   };
+
+  useEffect(() => {
+    handleCurrentPositions();
+  }, [positions]);
 
   const renderPieces = () =>
     positions.map((i) => (
@@ -74,26 +93,6 @@ const Puzzle = (props) => {
         `}
         </style>
       </DndProvider>
-      <div style={{display: "flex", gap: 10+"px"}}>
-        <button
-          onClick={() => setPositions(shuffle(rootPositions))}
-          className={s.Button}
-          style={{ paddingLeft: 50 + "px", paddingRight: 50 + "px" }}
-        >
-          Перемешать
-        </button>
-        <button
-          className={s.Button}
-          style={{
-            marginTop: 10 + "px",
-            paddingLeft: 50 + "px",
-            paddingRight: 50 + "px",
-          }}
-          onClick={handlePos}
-        >
-          Сохранить
-        </button>
-      </div>
     </div>
   );
 };

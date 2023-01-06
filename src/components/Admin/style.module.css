@@ -77,7 +77,8 @@ body{
 .Puzzle{
     display: grid;
     grid-template-areas: 
-    "c t";
+    "c t"
+    "b b";
     grid-template-rows: 400px;
     grid-template-columns: 534px 120px;
     justify-content: center;
