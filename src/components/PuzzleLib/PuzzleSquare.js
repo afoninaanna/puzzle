@@ -56,29 +56,40 @@ const Puzzle = (props) => {
       } else if (value === dropPosition) {
         newValue = sourcePosition;
       }
-
       newPositions.push(newValue);
     }
     setPositions(newPositions);
+
+    countScore(sourcePosition, dropPosition, newPositions);
+
+    if (isEqual(rootPositions, newPositions)) {
+      onComplete();
+    }
+  };
+
+  const countScore = (sourcePosition, dropPosition, newPositions) => {
     if (
       sourcePosition != dropPosition &&
       newPositions[sourcePosition] == sourcePosition
     ) {
-      positionScore.push(sourcePosition);
-      props.setScore(props.score + 10);
+      if (positionScore.length == 0){
+        positionScore.push(sourcePosition);
+        props.setScore(props.score + 10);
+      } else {
+        if (!positionScore.includes(sourcePosition)) {
+          positionScore.push(sourcePosition);
+          props.setScore(props.score + 10);
+        }
+      }
+      console.log(positionScore);
     } else if (sourcePosition == dropPosition) {
       props.setScore(props.score);
     } else {
-      if(props.score < 5){
-        props.setScore(0)
+      if (props.score < 5) {
+        props.setScore(0);
       } else {
         props.setScore(props.score - 5);
       }
-      
-    }
-
-    if (isEqual(rootPositions, newPositions)) {
-      onComplete();
     }
   };
 
