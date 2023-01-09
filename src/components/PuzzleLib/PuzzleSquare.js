@@ -81,7 +81,6 @@ const Puzzle = (props) => {
           props.setScore(props.score + 10);
         }
       }
-      console.log(positionScore);
     } else if (sourcePosition == dropPosition) {
       props.setScore(props.score);
     } else {

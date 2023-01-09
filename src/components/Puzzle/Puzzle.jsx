@@ -161,11 +161,15 @@ const Puzzle = () => {
         </div>
       </Draggable>
       <div className={s.Params}>
-          {puzzleParams.countMethod == "На время" ? (
-            <div style={{ width: 80, cursor: "default" }}><p className={s.Time}>{formatTime.map((elem) => elem.slice(-2))}</p></div>
-          ) : puzzleParams.countMethod == "На очки" ? (
-            <div style={{ width: 80, cursor: "default" }}><p className={s.Score}>{score}</p></div>
-          ) : null}
+        {puzzleParams.countMethod == "На время" ? (
+          <div style={{ width: 80, cursor: "default" }}>
+            <p className={s.Time}>{formatTime.map((elem) => elem.slice(-2))}</p>
+          </div>
+        ) : puzzleParams.countMethod == "На очки" ? (
+          <div style={{ width: 80, cursor: "default" }}>
+            <p className={s.Score}>{score}</p>
+          </div>
+        ) : null}
         <div onClick={soundClick}>
           <img id="sound" src={isPlaying ? soundOn : soundOff}></img>
           <label htmlFor="sound">Звук</label>
@@ -234,9 +238,11 @@ const Puzzle = () => {
       </Modal>
       <Modal visible={visible.modalEnd}>
         <p>Пазл собран! </p>
-        {puzzleParams.countMethod === "На время"
-          ? formatTime.map((elem) => elem.slice(-2))
-          : null}
+        {puzzleParams.countMethod === "На время" ? (
+          <p>Ваше время: {formatTime.map((elem) => elem.slice(-2))}</p>
+        ) : puzzleParams.countMethod === "На очки" ? (
+          <p>Ваш счет: {score}</p>
+        ) : null}
         <Link to={USER_SETTINGS_ROUTE}>
           <button className={s.Button}>Завершить игру</button>
         </Link>
