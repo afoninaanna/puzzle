@@ -102,9 +102,12 @@ const Puzzle = () => {
         src: "/3d20874f20174bd.mp3",
         loop: true,
         volume: 0.5,
+        onloaderror: function() {
+          alert('Отсутствует файл звукового сопровождения')
+        }
       });
       audio.play();
-      setIsPlaying(true)
+      setIsPlaying(true);
     }
   };
 
