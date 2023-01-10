@@ -7,7 +7,7 @@ import { shuffle, isEqual } from './utils';
 import Piece from './Piece';
 import PieceTape from "./PieceTape";
 
-let positionScore = []
+let positionScore = [];
 const Puzzle = (props) => {
   const { width, height, piecesX, piecesY, onComplete } = props;
   //Изначальные позиции пазла
@@ -16,11 +16,21 @@ const Puzzle = (props) => {
   const [positions, setPositions] = useState(
     props.positions ? props.positions : rootPositions
   );
-  //Если сборка на ленте, то используем эту переменную как отдельные позиции на поле
+  /*
+  Если сборка на ленте, то используем эту переменную как отдельные позиции на поле.
+  Выбор изначальных позиций (из БД - если игрок, пустые - если админ)
+  */
   const [draggedElements, setDraggedElements] = useState(
-    [...Array(piecesX * piecesY)].map(() => null)
+    props.draggedElements
+      ? [...Array(piecesX * piecesY)].map((i, index) =>
+          props.draggedElements[index] != null
+            ? props.draggedElements[index]
+            : null
+        )
+      : [...Array(piecesX * piecesY)].map(() => null)
   );
 
+  //Координаты фрагментов
   const coords = rootPositions.map((pos) => ({
     x: Math.floor((pos % piecesX) * (width / piecesX)),
     y: Math.floor(pos / piecesX) * (height / piecesY),
@@ -31,8 +41,8 @@ const Puzzle = (props) => {
   useEffect(() => {
     if (props.difficulty) {
       setPositions(rootPositions);
+      setDraggedElements([...Array(piecesX * piecesY)].map(() => null));
     }
-    setDraggedElements([...Array(piecesX * piecesY)].map(() => null));
   }, [props.difficulty]);
 
   //Для перемешивания фрагментов при нажатии на кнопку "Перемешать"
@@ -46,12 +56,24 @@ const Puzzle = (props) => {
   //--- Ф-ии админа и игрока ---//
   //Получаем координаты после перемешивания или при перестановке фрагментов
   const handleCurrentPositions = () => {
-    var pos = positions;
+    let pos = positions;
     props.currentPos(pos);
+  };
+  const handleCurrentDraggedElements = () => {
+    let dragPos = draggedElements;
+    props.currentDragPos(dragPos);
   };
   useEffect(() => {
     handleCurrentPositions();
-  }, [positions]);
+    if (props.assemblyType == "На ленте") {
+      handleCurrentDraggedElements();
+    }
+  }, [positions, draggedElements]);
+
+  //Надо обнулить позиции с которых не получаются очки
+  useEffect(() => {
+    positionScore = [];
+  }, []);
 
   //Триггер конца игры
   useEffect(() => {
@@ -70,9 +92,6 @@ const Puzzle = (props) => {
     indexField,
     indexTape
   ) => {
-    //console.log("srcPos: " + sourcePosition, "drpPos: " + dropPosition);
-    // console.log("indxField: " + indexField, "indxTape: " + indexTape);
-    // console.log("draggedElements[indxField]: " + draggedElements[indexField]);
     let newArr = [];
     if (dropPosition == null && indexTape != null) {
       setPositions([...positions.filter((elem) => elem !== sourcePosition)]);
@@ -102,7 +121,7 @@ const Puzzle = (props) => {
       }
       setDraggedElements([]);
       setDraggedElements(newPositions);
-      newArr = newPositions
+      newArr = newPositions;
     }
     countScore(sourcePosition, dropPosition, newArr);
     // Пока не знаю как реализовать обмен фрагментов на поле м/у пустым и непустым
@@ -164,6 +183,7 @@ const Puzzle = (props) => {
     }
   };
 
+  //Рендеринг фрагментов на поле, если режим "На ленте"
   const renderPiecesWithTape = () =>
     draggedElements.map((i, index) => (
       <Piece
@@ -175,7 +195,7 @@ const Puzzle = (props) => {
         {...props}
       />
     ));
-
+  //Рендеринг фрагментов на ленте, если режим "На ленте"
   const renderPiecesTape = () =>
     positions.map((i, index) => (
       <PieceTape
@@ -186,7 +206,7 @@ const Puzzle = (props) => {
         {...props}
       />
     ));
-
+  //Рендеринг фрагментов на поле, если режим "На поле"
   const renderPiecesOnlyField = () =>
     positions.map((i, index) => (
       <Piece
@@ -208,9 +228,7 @@ const Puzzle = (props) => {
             : renderPiecesOnlyField()}
         </div>
         {props.assemblyType == "На ленте" ? (
-          <div
-            style={puzzleTapeStyles({ width, height })}
-          >
+          <div style={puzzleTapeStyles({ width, height })}>
             {renderPiecesTape()}
           </div>
         ) : null}
