@@ -59,7 +59,7 @@ const Difficulty = (props) => {
           onChange={(e) => changeDifficulty(e.target.value)}
         >
           {state.map((state) => (
-            <option>{state[0]}</option>
+            <option key={state[0]}>{state[0]}</option>
           ))}
         </select>
       </form>

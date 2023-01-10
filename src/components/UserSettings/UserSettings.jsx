@@ -86,6 +86,7 @@ const UserSettings = () => {
               numOfFragVertical: puzzleData[0][1].numOfFragVertical,
               imageUrl: puzzleData[0][1].image,
               positions: puzzleData[0][1].positions,
+              draggedElements: puzzleData[0][1].draggedElements ? puzzleData[0][1].draggedElements : null,
               countMethod,
               gameType,
             });
@@ -107,10 +108,11 @@ const UserSettings = () => {
               numOfFragVertical: puzzleData[0][1].numOfFragVertical,
               imageUrl: puzzleData[0][1].image,
               positions: puzzleData[0][1].positions,
-              countMethod: puzzleData[0][1].countMethod,
-              time: puzzleData[0][1].time
-                ? puzzleData[0][1].time
+              draggedElements: puzzleData[0][1].draggedElements
+                ? puzzleData[0][1].draggedElements
                 : null,
+              countMethod: puzzleData[0][1].countMethod,
+              time: puzzleData[0][1].time ? puzzleData[0][1].time : null,
               score: puzzleData[0][1].score ? puzzleData[0][1].score : 0,
               gameType,
             });

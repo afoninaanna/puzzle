@@ -53,8 +53,12 @@ const Puzzle = () => {
   };
 
   const handleCurrentPositions = (value) => {
-    //Запоминание нынешних позиций фрагментов
+    //Запоминание нынешних позиций фрагментов на поле, если режим на поле и на ленте, если режим на ленте
     puzzleParams.positions = value;
+  };
+  const handleCurrentDraggedElements = (value) => {
+    //Запоминание нынешних позиций фрагментов на поле, если режим на ленте
+    puzzleParams.draggedElements = value;
   };
   
   const writeToDatabase = () => {
@@ -63,6 +67,7 @@ const Puzzle = () => {
       ref(database, `savedPuzzle/${auth.currentUser.uid}/${savedPuzzleName}`),
       {
         positions: puzzleParams.positions,
+        draggedElements: puzzleParams.draggedElements ? puzzleParams.draggedElements : null,
         difficulty: puzzleParams.difficulty,
         image: puzzleParams.imageUrl,
         numOfFragVertical: puzzleParams.numOfFragVertical,
@@ -197,9 +202,11 @@ const Puzzle = () => {
           piecesX={puzzleParams.numOfFragHorizontal}
           piecesY={puzzleParams.numOfFragVertical}
           positions={puzzleParams.positions}
+          draggedElements={puzzleParams.draggedElements}
           assemblyType={puzzleParams.assemblyType}
           onComplete={onComplete}
           currentPos={handleCurrentPositions}
+          currentDragPos={handleCurrentDraggedElements}
           score={score}
           setScore={setScore}
         />

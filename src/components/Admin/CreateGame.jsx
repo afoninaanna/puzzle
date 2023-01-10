@@ -15,12 +15,13 @@ const CreateGame = (props) => {
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState(null);
   const [positions, setPositions] = useState([]); // Позиции сгенерированного пазла
+  const [draggedElements, setDraggedElements] = useState([]); // Позиции на поле при режиме на ленте
   const [puzzleName, setPuzzleName] = useState("");
   const [numOfFragVertical, setNumOfFragVertical] = useState(4);
   const [numOfFragHorizontal, setNumOfFragHorizontal] = useState(4);
   const [fragmentType, setFragmentType] = useState("");
   const [assemblyType, setAssemblyType] = useState("");
-  const [isShuffled, setIsShuffled] = useState(false)
+  const [isShuffled, setIsShuffled] = useState(false);
 
   const writeToDatabase = () => {
     //Запись игры в БД
@@ -31,6 +32,7 @@ const CreateGame = (props) => {
           difficulty,
           image: url,
           positions: positions,
+          draggedElements: draggedElements ? draggedElements : null,
           numOfFragVertical,
           numOfFragHorizontal,
           assemblyType,
@@ -43,8 +45,12 @@ const CreateGame = (props) => {
   };
 
   const handleCurrentPositions = (value) => {
-    //Запоминание нынешних позиций фрагментов
+    //Запоминание нынешних позиций фрагментов на поле, если режим на поле и на ленте, если режим на ленте
     setPositions(value);
+  };
+  const handleCurrentDraggedElements = (value) => {
+    //Запоминание нынешних позиций фрагментов на поле, если режим на ленте
+    setDraggedElements(value);
   };
 
   const onImageChange = (event) => {
@@ -59,6 +65,9 @@ const CreateGame = (props) => {
   };
 
   const changeDifficulty = (e) => {
+    alert(
+      "Не забудьте нажать на кнопку перемешать. Если хотите облегчить задачу игроку, то перемешивать не обязательно :)"
+    );
     setDifficulty(e);
     const currentDifficulty = state?.find((dif) => dif[0] === e);
     setNumOfFragVertical(currentDifficulty[1].numOfFragVertical);
@@ -108,7 +117,7 @@ const CreateGame = (props) => {
           onChange={(e) => changeDifficulty(e.target.value)}
         >
           {state.map((state) => (
-            <option>{state[0]}</option>
+            <option key={state[0]}>{state[0]}</option>
           ))}
         </select>
       </form>
@@ -122,6 +131,7 @@ const CreateGame = (props) => {
             piecesY={numOfFragVertical}
             onComplete={onComplete}
             currentPos={handleCurrentPositions}
+            currentDragPos={handleCurrentDraggedElements}
             isShuffled={isShuffled}
             setIsShuffled={setIsShuffled}
             difficulty={difficulty}
