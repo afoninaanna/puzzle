@@ -153,7 +153,7 @@ const Puzzle = () => {
     <div className={s.Page}>
       <Draggable
         defaultPosition={{ x: 400, y: 100 }}
-        bounds={{ left: 0, top: 0, right: 1100, bottom: 600 }}
+        bounds={{ left: 0, top: 0, right: 1280, bottom: 640 }}
       >
         <div className={s.Hint} style={{ display: displayHint, zIndex: 99 }}>
           <img className={s.HintImg} src={puzzleParams.imageUrl}></img>

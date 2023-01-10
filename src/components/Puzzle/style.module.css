@@ -5,11 +5,9 @@
     background-color: white;
     grid-template-areas: 
     "p p"
-    "c t";
+    "c c";
     grid-template-rows: calc(var(--index)*3) 600px;
-    grid-template-columns: 800px 120px;
     justify-content: center;
-    column-gap: 2%;
 }
 .Params{
     grid-area: p;

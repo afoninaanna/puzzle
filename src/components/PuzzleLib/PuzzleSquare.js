@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { puzzleWrapperStyles } from './styles';
+import { puzzleWrapperStyles, puzzleTapeStyles } from './styles';
 import { shuffle, isEqual } from './utils';
 import Piece from './Piece';
 import PieceTape from "./PieceTape";
-import s from './../Admin/style.module.css';
 
 let positionScore = []
 const Puzzle = (props) => {
@@ -74,12 +73,14 @@ const Puzzle = (props) => {
     //console.log("srcPos: " + sourcePosition, "drpPos: " + dropPosition);
     // console.log("indxField: " + indexField, "indxTape: " + indexTape);
     // console.log("draggedElements[indxField]: " + draggedElements[indexField]);
+    let newArr = [];
     if (dropPosition == null && indexTape != null) {
       setPositions([...positions.filter((elem) => elem !== sourcePosition)]);
       const newDraggedElements = [...draggedElements];
       newDraggedElements[indexField] = sourcePosition;
       setDraggedElements([]);
       setDraggedElements(newDraggedElements);
+      newArr = newDraggedElements;
     } else if (
       sourcePosition != null &&
       dropPosition != null &&
@@ -101,7 +102,9 @@ const Puzzle = (props) => {
       }
       setDraggedElements([]);
       setDraggedElements(newPositions);
+      newArr = newPositions
     }
+    countScore(sourcePosition, dropPosition, newArr);
     // Пока не знаю как реализовать обмен фрагментов на поле м/у пустым и непустым
     // else if (dropPosition == null && indexTape == undefined) {
     //   const newDraggedElements = [...draggedElements];
@@ -206,16 +209,7 @@ const Puzzle = (props) => {
         </div>
         {props.assemblyType == "На ленте" ? (
           <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 20,
-              height: 400,
-              width: "auto",
-              paddingRight: 10,
-              overflowY: "scroll",
-              border: 1 + " solid" + " #ccc",
-            }}
+            style={puzzleTapeStyles({ width, height })}
           >
             {renderPiecesTape()}
           </div>

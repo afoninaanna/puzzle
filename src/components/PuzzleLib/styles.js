@@ -21,3 +21,14 @@ export const puzzlePieceStyles = (props) => ({
   backgroundRepeat: "no-repeat",
   cursor: "move",
 });
+
+export const puzzleTapeStyles = (props) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: 20,
+  height: `${props.height}px`,
+  width: "auto",
+  paddingRight: 10,
+  overflowY: "scroll",
+  border: 1 + " solid" + " #ccc",
+});
