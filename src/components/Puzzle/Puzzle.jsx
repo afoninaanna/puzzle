@@ -188,19 +188,19 @@ const Puzzle = () => {
       </div>
       <div className={s.Puzzle}>
         <PuzzleSquare
-          image={puzzleParams.imageUrl}
           width={810}
           height={600}
+          image={puzzleParams.imageUrl}
           piecesX={puzzleParams.numOfFragHorizontal}
           piecesY={puzzleParams.numOfFragVertical}
-          onComplete={onComplete}
           positions={puzzleParams.positions}
+          assemblyType={puzzleParams.assemblyType}
+          onComplete={onComplete}
           currentPos={handleCurrentPositions}
           score={score}
           setScore={setScore}
         />
       </div>
-      <div className={s.Tape}></div>
       <Modal visible={visible.modalSave}>
         <div>
           <input

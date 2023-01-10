@@ -1,13 +1,13 @@
-import React, { memo } from 'react';
-import PropTypes from 'prop-types';
-import { useDrag, useDrop } from 'react-dnd';
-import { puzzlePieceStyles } from './styles';
+import React, { memo } from "react";
+import PropTypes from "prop-types";
+import { useDrag, useDrop } from "react-dnd";
+import { puzzlePieceStyles } from "./styles";
 
 const Piece = memo((props) => {
-  const { position, onDropPiece } = props;
+  const { position, indexField, indexTape, onDropPiece } = props;
 
   const [, dragEl] = useDrag({
-    item: { position, type: "PIECE" },
+    item: { position, indexField, indexTape, type: "PIECE" },
   });
 
   const [{ isOver }, dropRef] = useDrop({
@@ -15,7 +15,9 @@ const Piece = memo((props) => {
     drop: (props) => {
       onDropPiece(
         props.position, // source position
-        position // drop position
+        position, // drop position
+        indexField,
+        props.indexTape
       );
     },
     collect: (monitor) => {
@@ -24,13 +26,9 @@ const Piece = memo((props) => {
       }
     }
   });
-
   return (
     <div className="puzzle-piece" ref={dropRef}>
-      <div 
-        ref={dragEl} 
-        style={puzzlePieceStyles({ ...props, isOver })}>
-      </div>
+      <div ref={dragEl} style={puzzlePieceStyles({ ...props, isOver })}></div>
     </div>
   );
 });
@@ -39,9 +37,6 @@ Piece.propTypes = {
   image: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  piecesX: PropTypes.number.isRequired,
-  piecesY: PropTypes.number.isRequired,
-  position: PropTypes.number.isRequired,
   onDropPiece: PropTypes.func.isRequired,
 };
 

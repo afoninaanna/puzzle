@@ -6,7 +6,7 @@ import { ref, get, set, onValue } from "firebase/database";
 import { uploadBytes, ref as sRef, getDownloadURL } from "firebase/storage";
 
 const onComplete = () => {
-  console.log('Puzzle is completed!');
+  //Затычка
 };
 
 const CreateGame = (props) => {
@@ -113,7 +113,7 @@ const CreateGame = (props) => {
         </select>
       </form>
       {puzzleName && imageUrl ? (
-        <div className={s.Puzzle}>
+        <div>
           <PuzzleSquare
             image={image}
             width={540}
@@ -125,8 +125,8 @@ const CreateGame = (props) => {
             isShuffled={isShuffled}
             setIsShuffled={setIsShuffled}
             difficulty={difficulty}
+            assemblyType={assemblyType}
           />
-          <div className={s.Tape}></div>
           <div style={{ display: "flex", gap: 10 + "px", gridArea: "b" }}>
             <button
               // onClick={() => setPositions(shuffle(rootPositions))}

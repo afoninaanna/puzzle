@@ -56,23 +56,7 @@
     background-color: #71b696;
 }
 .Puzzle{
-    display: grid;
-    grid-template-areas: 
-    "c t";
-    grid-template-rows: 400px;
-    justify-content: center;
-    column-gap: 2%;
-}
-.Canvas{
-    grid-area: c;
-}
-.Canvas div{
-    border: 1px solid #ccc;
-}
-.Tape{
-    grid-area: t;
-    overflow-y: scroll;
-    border: 1px solid #ccc;
+    display: flex;
 }
 .Hint{
     cursor:move;
