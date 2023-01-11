@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import s from './style.module.css';
-import PuzzleSquare from '../PuzzleLib/PuzzleSquare'
+import PuzzleSquare from '../PuzzleLib/Square/PuzzleSquare'
 import { app, auth, database, storage } from "../../firebase";
 import { ref, get, set, onValue } from "firebase/database";
 import { uploadBytes, ref as sRef, getDownloadURL } from "firebase/storage";

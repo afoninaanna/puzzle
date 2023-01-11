@@ -9,7 +9,7 @@ import soundOn from '../../img/soundOn.svg'
 import soundOff from '../../img/soundOff.svg'
 import save from '../../img/save.svg'
 import imageView from '../../img/imageView.svg'
-import PuzzleSquare from "../PuzzleLib/PuzzleSquare";
+import PuzzleSquare from "../PuzzleLib/Square/PuzzleSquare";
 import Draggable from "react-draggable";
 import close from "../../img/close.svg"
 import Modal from '../Modal/Modal';
