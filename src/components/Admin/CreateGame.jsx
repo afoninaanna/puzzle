@@ -102,6 +102,7 @@ const CreateGame = (props) => {
       <form className={s.Field}>
         <p>Название игры</p>
         <input
+          style={{width: "60%"}}
           type="text"
           value={puzzleName}
           onChange={(e) => setPuzzleName(e.target.value)}
