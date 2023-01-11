@@ -78,7 +78,6 @@ const PuzzleTriangle = (props) => {
     if (props.assemblyType == "На ленте") {
       handleCurrentDraggedElements();
     }
-    console.log(positions);
   }, [positions, draggedElements]);
 
   //Надо обнулить позиции с которых не получаются очки

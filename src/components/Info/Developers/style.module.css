@@ -5,6 +5,18 @@
     align-items: center;
     flex-flow: row nowrap;
     background-color: #6d7370;
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1s;
+    animation-name: fade;
+    animation-duration: 1s;
+}
+@-webkit-keyframes fade{
+    from{opacity: .4;}
+    to{opacity: 1;}
+}
+@keyframes fade{
+    from{opacity: .4;}
+    to{opacity: 1;}
 }
 .Page::before, .Page::after {
     content: '';  /* Insert pseudo-element */

@@ -6,6 +6,7 @@ import { app, auth, database, storage } from "../../firebase";
 import { ref, get, set, onValue } from "firebase/database";
 import { uploadBytes, ref as sRef, getDownloadURL } from "firebase/storage";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import loading from "../../img/loading.gif";
 
 const onComplete = () => {
   //Затычка
@@ -24,8 +25,10 @@ const CreateGame = (props) => {
   const [fragmentType, setFragmentType] = useState("");
   const [assemblyType, setAssemblyType] = useState("");
   const [isShuffled, setIsShuffled] = useState(false);
+  const [isSaving, setIsSaving] = useState(false)
 
   const writeToDatabase = () => {
+    setIsSaving(true)
     //Запись игры в БД
     const imageRef = sRef(storage, `puzzles/${puzzleName}`);
     uploadBytes(imageRef, imageUrl).then((snapshot) => {
@@ -40,8 +43,9 @@ const CreateGame = (props) => {
           assemblyType,
           fragmentType,
         });
-        alert("Игра сохранена");
         setPuzzleName("");
+        setIsSaving(false);
+        alert("Игра сохранена");
       });
     });
   };
@@ -96,100 +100,107 @@ const CreateGame = (props) => {
   }, []);
 
   return (
-    <div>
-      <p style={{ marginBottom: 20 + "px" }}>
-        <strong>Создание игры</strong>
-      </p>
-      <form className={s.Field}>
-        <p>Название игры</p>
-        <input
-          style={{ width: "60%" }}
-          type="text"
-          value={puzzleName}
-          onChange={(e) => setPuzzleName(e.target.value)}
-        ></input>
-      </form>
-      <form className={s.Field}>
-        <p>Изображение</p>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => onImageChange(e)}
-        ></input>
-      </form>
-      <form className={s.Field}>
-        <p>Выбор уровня сложности</p>
-        <select
-          value={difficulty}
-          onChange={(e) => changeDifficulty(e.target.value)}
-        >
-          {state.map((state) => (
-            <option key={state[0]}>{state[0]}</option>
-          ))}
-        </select>
-      </form>
-      {puzzleName && imageUrl ? (
-        <div>
-          {fragmentType == "Прямоугольные" ? (
-            <PuzzleSquare
-              image={image}
-              width={540}
-              height={400}
-              piecesX={numOfFragHorizontal}
-              piecesY={numOfFragVertical}
-              onComplete={onComplete}
-              currentPos={handleCurrentPositions}
-              currentDragPos={handleCurrentDraggedElements}
-              isShuffled={isShuffled}
-              setIsShuffled={setIsShuffled}
-              difficulty={difficulty}
-              assemblyType={assemblyType}
-              HTML5Backend={HTML5Backend}
-            />
-          ) : (
-            <PuzzleTriangle
-              image={image}
-              width={540}
-              height={400}
-              piecesX={numOfFragHorizontal}
-              piecesY={numOfFragVertical / 2}
-              onComplete={onComplete}
-              currentPos={handleCurrentPositions}
-              currentDragPos={handleCurrentDraggedElements}
-              isShuffled={isShuffled}
-              setIsShuffled={setIsShuffled}
-              difficulty={difficulty}
-              assemblyType={assemblyType}
-              HTML5Backend={HTML5Backend}
-            />
-          )}
-          <div style={{ display: "flex", gap: 10 + "px", gridArea: "b" }}>
-            <button
-              // onClick={() => setPositions(shuffle(rootPositions))}
-              className={s.Button}
-              style={{ paddingLeft: 50 + "px", paddingRight: 50 + "px" }}
-              onClick={() => setIsShuffled(true)}
+    <>
+      {isSaving ? (
+        <img src={loading} alt="puzzle"></img>
+      ) : (
+        <div className={s.Anim}>
+          <p style={{ marginBottom: 20 + "px" }}>
+            <strong>Создание игры</strong>
+          </p>
+          <form className={s.Field}>
+            <p>Название игры</p>
+            <input
+              style={{ width: "60%" }}
+              type="text"
+              value={puzzleName}
+              onChange={(e) => setPuzzleName(e.target.value)}
+            ></input>
+          </form>
+          <form className={s.Field}>
+            <p>Изображение</p>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => onImageChange(e)}
+            ></input>
+          </form>
+          <form className={s.Field}>
+            <p>Выбор уровня сложности</p>
+            <select
+              value={difficulty}
+              onChange={(e) => changeDifficulty(e.target.value)}
             >
-              Перемешать
-            </button>
-            <button
-              className={s.Button}
-              style={{
-                marginTop: 10 + "px",
-                paddingLeft: 50 + "px",
-                paddingRight: 50 + "px",
-              }}
-              onClick={writeToDatabase}
-            >
-              Сохранить
-            </button>
-          </div>
+              {state.map((state) => (
+                <option key={state[0]}>{state[0]}</option>
+              ))}
+            </select>
+          </form>
+          {puzzleName && imageUrl ? (
+            <div>
+              {fragmentType == "Прямоугольные" ? (
+                <PuzzleSquare
+                  image={image}
+                  width={540}
+                  height={400}
+                  piecesX={numOfFragHorizontal}
+                  piecesY={numOfFragVertical}
+                  onComplete={onComplete}
+                  currentPos={handleCurrentPositions}
+                  currentDragPos={handleCurrentDraggedElements}
+                  isShuffled={isShuffled}
+                  setIsShuffled={setIsShuffled}
+                  difficulty={difficulty}
+                  assemblyType={assemblyType}
+                />
+              ) : (
+                <PuzzleTriangle
+                  image={image}
+                  width={540}
+                  height={400}
+                  piecesX={numOfFragHorizontal}
+                  piecesY={numOfFragVertical / 2}
+                  onComplete={onComplete}
+                  currentPos={handleCurrentPositions}
+                  currentDragPos={handleCurrentDraggedElements}
+                  isShuffled={isShuffled}
+                  setIsShuffled={setIsShuffled}
+                  difficulty={difficulty}
+                  assemblyType={assemblyType}
+                />
+              )}
+              <div style={{ display: "flex", gap: 10 + "px", gridArea: "b" }}>
+                <button
+                  // onClick={() => setPositions(shuffle(rootPositions))}
+                  className={s.Button}
+                  style={{ paddingLeft: 50 + "px", paddingRight: 50 + "px" }}
+                  onClick={() => setIsShuffled(true)}
+                >
+                  Перемешать
+                </button>
+                <button
+                  className={s.Button}
+                  style={{
+                    marginTop: 10 + "px",
+                    paddingLeft: 50 + "px",
+                    paddingRight: 50 + "px",
+                  }}
+                  onClick={writeToDatabase}
+                >
+                  Сохранить
+                </button>
+              </div>
+            </div>
+          ) : null}
+          <button
+            onClick={() => props.onSelectComponent("")}
+            className={s.Button}
+          >
+            Закрыть
+          </button>
         </div>
-      ) : null}
-      <button onClick={() => props.onSelectComponent("")} className={s.Button}>
-        Закрыть
-      </button>
-    </div>
+      )}
+    </>
   );
 }
 

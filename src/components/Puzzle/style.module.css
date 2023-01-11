@@ -8,6 +8,18 @@
     "c c";
     grid-template-rows: calc(var(--index)*3) 600px;
     justify-content: center;
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1s;
+    animation-name: fade;
+    animation-duration: 1s;
+}
+@-webkit-keyframes fade{
+    from{opacity: .4;}
+    to{opacity: 1;}
+}
+@keyframes fade{
+    from{opacity: .4;}
+    to{opacity: 1;}
 }
 .Params{
     grid-area: p;

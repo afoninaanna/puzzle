@@ -136,80 +136,84 @@ const UserSettings = () => {
       {difficulties.length == 0 ? (
         <img src={loading} alt="puzzle"></img>
       ) : (
-        <div className={s.Container}>
+        <>
           <HelpButton />
-          <p style={{ marginBottom: 20 + "px" }}>
-            <strong>Параметры игры «Puzzle»</strong>
-          </p>
-          <form action="" className={s.Field}>
-            <p>Выбор уровня сложности</p>
-            <select
-              value={currentDifficulty}
-              onChange={(e) => setCurrentDifficulty(e.target.value)}
-              required
-            >
-              <option defaultValue disabled></option>
-              {difficulties.map((difficulty) => (
-                <option>{difficulty[0]}</option>
-              ))}
-            </select>
-          </form>
-          <form className={s.Field}>
-            <p>Выбор типа игры</p>
-            <select
-              value={gameType}
-              onChange={(e) => setGameType(e.target.value)}
-              required
-            >
-              <option defaultValue disabled></option>
-              {puzzles ? <option>Новая</option> : null}
-              {savedPuzzles?.find((user) => user[0] === uid) ? (
-                <option>Существующая</option>
-              ) : null}
-            </select>
-          </form>
-          {gameType == "Новая" ?  <form className={s.Field}>
-            <p>Способ подсчета результата</p>
-            <select
-              value={countMethod}
-              onChange={(e) => setCountMethod(e.target.value)}
-              required
-            >
-              <option defaultValue disabled></option>
-              <option>Не ведется</option>
-              <option>На очки</option>
-              <option>На время</option>
-            </select>
-          </form> : null}
-         
-          <form className={s.Field}>
-            <p>Игра</p>
-            <select
-              value={currentPuzzle}
-              onChange={(e) => setCurrentPuzzle(e.target.value)}
-              required
-            >
-              <option defaultValue disabled></option>
-              {currentPuzzles.map((currentPuzzle) => (
-                <option>{currentPuzzle[0]}</option>
-              ))}
-            </select>
-          </form>
-          {currentDifficulty != "" &&
-          currentPuzzle != "" &&
-          puzzleParams.countMethod != "" ? (
-            <Link
-              to={PUZZLE_ROUTE}
-              style={{ width: 100 + "%" }}
-              state={{ puzzleParams }}
-            >
-              <button className={s.Button}>Начать игру</button>
-            </Link>
-          ) : null}
-          <button onClick={handleLogOut} className={s.Button}>
-            Выйти из аккаунта
-          </button>
-        </div>
+          <div className={s.Container}>
+            <p style={{ marginBottom: 20 + "px" }}>
+              <strong>Параметры игры «Puzzle»</strong>
+            </p>
+            <form action="" className={s.Field}>
+              <p>Выбор уровня сложности</p>
+              <select
+                value={currentDifficulty}
+                onChange={(e) => setCurrentDifficulty(e.target.value)}
+                required
+              >
+                <option defaultValue disabled></option>
+                {difficulties.map((difficulty) => (
+                  <option>{difficulty[0]}</option>
+                ))}
+              </select>
+            </form>
+            <form className={s.Field}>
+              <p>Выбор типа игры</p>
+              <select
+                value={gameType}
+                onChange={(e) => setGameType(e.target.value)}
+                required
+              >
+                <option defaultValue disabled></option>
+                {puzzles ? <option>Новая</option> : null}
+                {savedPuzzles?.find((user) => user[0] === uid) ? (
+                  <option>Существующая</option>
+                ) : null}
+              </select>
+            </form>
+            {gameType == "Новая" ? (
+              <form className={s.Field}>
+                <p>Способ подсчета результата</p>
+                <select
+                  value={countMethod}
+                  onChange={(e) => setCountMethod(e.target.value)}
+                  required
+                >
+                  <option defaultValue disabled></option>
+                  <option>Не ведется</option>
+                  <option>На очки</option>
+                  <option>На время</option>
+                </select>
+              </form>
+            ) : null}
+
+            <form className={s.Field}>
+              <p>Игра</p>
+              <select
+                value={currentPuzzle}
+                onChange={(e) => setCurrentPuzzle(e.target.value)}
+                required
+              >
+                <option defaultValue disabled></option>
+                {currentPuzzles.map((currentPuzzle) => (
+                  <option>{currentPuzzle[0]}</option>
+                ))}
+              </select>
+            </form>
+            {currentDifficulty != "" &&
+            currentPuzzle != "" &&
+            puzzleParams.countMethod != "" ? (
+              <Link
+                to={PUZZLE_ROUTE}
+                style={{ width: 100 + "%" }}
+                state={{ puzzleParams }}
+              >
+                <button className={s.Button}>Начать игру</button>
+              </Link>
+            ) : null}
+            <button onClick={handleLogOut} className={s.Button}>
+              Выйти из аккаунта
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

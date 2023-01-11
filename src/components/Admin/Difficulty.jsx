@@ -48,7 +48,7 @@ const Difficulty = (props) => {
   };
 
   return (
-    <div>
+    <div className={s.Anim}>
       <p style={{ marginBottom: 20 + "px" }}>
         <strong>Настройка уровня сложности</strong>
       </p>

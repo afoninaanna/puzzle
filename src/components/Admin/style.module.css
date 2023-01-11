@@ -13,6 +13,20 @@ body{
     content: '';  /* Insert pseudo-element */
     margin: auto; /* Make it push flex items to the center */
 }
+.Anim {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1s;
+    animation-name: fade;
+    animation-duration: 1s;
+}
+@-webkit-keyframes fade{
+    from{opacity: .4;}
+    to{opacity: 1;}
+}
+@keyframes fade{
+    from{opacity: .4;}
+    to{opacity: 1;}
+}
 .Container{
     display: flex;
     padding-top: 5vh;
