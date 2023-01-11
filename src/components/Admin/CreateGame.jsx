@@ -5,6 +5,7 @@ import PuzzleTriangle from "../PuzzleLib/Triangle/PuzzleTriangle";
 import { app, auth, database, storage } from "../../firebase";
 import { ref, get, set, onValue } from "firebase/database";
 import { uploadBytes, ref as sRef, getDownloadURL } from "firebase/storage";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const onComplete = () => {
   //Затычка
@@ -102,7 +103,7 @@ const CreateGame = (props) => {
       <form className={s.Field}>
         <p>Название игры</p>
         <input
-          style={{width: "60%"}}
+          style={{ width: "60%" }}
           type="text"
           value={puzzleName}
           onChange={(e) => setPuzzleName(e.target.value)}
@@ -110,7 +111,11 @@ const CreateGame = (props) => {
       </form>
       <form className={s.Field}>
         <p>Изображение</p>
-        <input type="file" accept="image/*" onChange={(e) => onImageChange(e)}></input>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => onImageChange(e)}
+        ></input>
       </form>
       <form className={s.Field}>
         <p>Выбор уровня сложности</p>
@@ -139,6 +144,7 @@ const CreateGame = (props) => {
               setIsShuffled={setIsShuffled}
               difficulty={difficulty}
               assemblyType={assemblyType}
+              HTML5Backend={HTML5Backend}
             />
           ) : (
             <PuzzleTriangle
@@ -154,6 +160,7 @@ const CreateGame = (props) => {
               setIsShuffled={setIsShuffled}
               difficulty={difficulty}
               assemblyType={assemblyType}
+              HTML5Backend={HTML5Backend}
             />
           )}
           <div style={{ display: "flex", gap: 10 + "px", gridArea: "b" }}>

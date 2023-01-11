@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
 import { puzzleWrapperStyles, puzzleTapeStyles } from '../styles';
 import { shuffleTriangle, isEqual } from "../utils";
@@ -8,9 +7,14 @@ import PieceTriangleTop from "./PieceTriangleTop";
 import PieceTriangleBottom from "./PieceTriangleBottom";
 import PieceTriangleTapeTop from "./PieceTriangleTapeTop";
 import PieceTriangleTapeBottom from "./PieceTriangleTapeBottom";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 let positionScore = [];
 const PuzzleTriangle = (props) => {
+  if (window.__isReactDndBackendSetUp) {
+    window.__isReactDndBackendSetUp = false;
+  }
+
   const { piecesX, width, height, piecesY, onComplete } = props;
   //Изначальные позиции пазла
   const rootPositions = [...Array(piecesX * piecesY).keys()];
@@ -260,7 +264,7 @@ const PuzzleTriangle = (props) => {
     );
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider backend={HTML5Backend} key={1}>
       <div style={{ display: "flex", gap: 20 }}>
         <div style={puzzleWrapperStyles({ width, height })}>
           {props.assemblyType == "На ленте"
