@@ -109,7 +109,7 @@ const CreateGame = (props) => {
       </form>
       <form className={s.Field}>
         <p>Изображение</p>
-        <input type="file" onChange={(e) => onImageChange(e)}></input>
+        <input type="file" accept="image/*" onChange={(e) => onImageChange(e)}></input>
       </form>
       <form className={s.Field}>
         <p>Выбор уровня сложности</p>
