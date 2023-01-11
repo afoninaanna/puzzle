@@ -31,3 +31,33 @@ export const puzzleTapeStyles = (props) => ({
   overflowY: "scroll",
   border: 1 + " solid" + " #ccc",
 });
+
+export const puzzlePieceTopStyles = (props) => ({
+  position: "relative",
+  zIndex: 1,
+  width: `${(props.width / props.piecesX) * 2}px`,
+  height: `${props.height / props.piecesY}px`,
+  margin: "0 -1px -1px",
+  border: "1px solid #000",
+  backgroundImage: `url(${props.image})`,
+  backgroundSize: `${props.width}px ${props.height}px`,
+  backgroundPosition: `-${props.x}px -${props.y}px`,
+  opacity: `${props.isOver ? "0.2" : "1"}`,
+  backgroundRepeat: "no-repeat",
+  cursor: "move",
+});
+
+export const puzzlePieceBottomStyles = (props) => ({
+  position: "absolute",
+  zIndex: 1,
+  width: `${(props.width / props.piecesX) * 2}px`,
+  height: `${props.height / props.piecesY}px`,
+  margin: `0 -${props.width / (props.piecesX - props.piecesX / 2)}px -1px`,
+  border: "1px solid #000",
+  backgroundImage: `url(${props.image})`,
+  backgroundSize: `${props.width}px ${props.height}px`,
+  backgroundPosition: `-${props.x}px -${props.y}px`,
+  opacity: `${props.isOver ? "0.2" : "1"}`,
+  backgroundRepeat: "no-repeat",
+  cursor: "move",
+});

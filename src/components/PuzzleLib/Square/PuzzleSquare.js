@@ -8,7 +8,6 @@ import Field from './PieceField';
 import PieceTape from "./PieceTape";
 
 let positionScore = [];
-let lastIndex = 0;
 const PuzzleSquare = (props) => {
   const { width, height, piecesX, piecesY, onComplete } = props;
   //Изначальные позиции пазла
@@ -124,15 +123,14 @@ const PuzzleSquare = (props) => {
       setDraggedElements(newPositions);
       newArr = newPositions;
     }
-    
     // Пока не знаю как реализовать обмен фрагментов на поле м/у пустым и непустым
-    else if (dropPosition == null) {
-      const newDraggedElements = [...draggedElements];
-      newDraggedElements[indexField] = newDraggedElements[lastIndex];
-      newDraggedElements[lastIndex] = null;
-      setDraggedElements(newDraggedElements);
-    }
-    lastIndex = indexField;
+    // else if (dropPosition == null) {
+    //   const newDraggedElements = [...draggedElements];
+    //   newDraggedElements[indexField] = newDraggedElements[lastIndex];
+    //   newDraggedElements[lastIndex] = null;
+    //   setDraggedElements(newDraggedElements);
+    // }
+    // lastIndex = indexField;
     countScore(sourcePosition, dropPosition, newArr);
   };
 

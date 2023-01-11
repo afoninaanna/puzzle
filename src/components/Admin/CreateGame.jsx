@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import s from './style.module.css';
 import PuzzleSquare from '../PuzzleLib/Square/PuzzleSquare'
+import PuzzleTriangle from "../PuzzleLib/Triangle/PuzzleTriangle";
 import { app, auth, database, storage } from "../../firebase";
 import { ref, get, set, onValue } from "firebase/database";
 import { uploadBytes, ref as sRef, getDownloadURL } from "firebase/storage";
@@ -123,20 +124,37 @@ const CreateGame = (props) => {
       </form>
       {puzzleName && imageUrl ? (
         <div>
-          <PuzzleSquare
-            image={image}
-            width={540}
-            height={400}
-            piecesX={numOfFragHorizontal}
-            piecesY={numOfFragVertical}
-            onComplete={onComplete}
-            currentPos={handleCurrentPositions}
-            currentDragPos={handleCurrentDraggedElements}
-            isShuffled={isShuffled}
-            setIsShuffled={setIsShuffled}
-            difficulty={difficulty}
-            assemblyType={assemblyType}
-          />
+          {fragmentType == "Прямоугольные" ? (
+            <PuzzleSquare
+              image={image}
+              width={540}
+              height={400}
+              piecesX={numOfFragHorizontal}
+              piecesY={numOfFragVertical}
+              onComplete={onComplete}
+              currentPos={handleCurrentPositions}
+              currentDragPos={handleCurrentDraggedElements}
+              isShuffled={isShuffled}
+              setIsShuffled={setIsShuffled}
+              difficulty={difficulty}
+              assemblyType={assemblyType}
+            />
+          ) : (
+            <PuzzleTriangle
+              image={image}
+              width={540}
+              height={400}
+              piecesX={numOfFragHorizontal}
+              piecesY={numOfFragVertical / 2}
+              onComplete={onComplete}
+              currentPos={handleCurrentPositions}
+              currentDragPos={handleCurrentDraggedElements}
+              isShuffled={isShuffled}
+              setIsShuffled={setIsShuffled}
+              difficulty={difficulty}
+              assemblyType={assemblyType}
+            />
+          )}
           <div style={{ display: "flex", gap: 10 + "px", gridArea: "b" }}>
             <button
               // onClick={() => setPositions(shuffle(rootPositions))}

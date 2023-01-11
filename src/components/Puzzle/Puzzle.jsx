@@ -10,6 +10,7 @@ import soundOff from '../../img/soundOff.svg'
 import save from '../../img/save.svg'
 import imageView from '../../img/imageView.svg'
 import PuzzleSquare from "../PuzzleLib/Square/PuzzleSquare";
+import PuzzleTriangle from "../PuzzleLib/Triangle/PuzzleTriangle";
 import Draggable from "react-draggable";
 import close from "../../img/close.svg"
 import Modal from '../Modal/Modal';
@@ -92,7 +93,7 @@ const Puzzle = () => {
         }
       );
     }
-      setVisible({ ...visible, modalSave: false });
+    setVisible({ ...visible, modalSave: false });
   }
 
   const soundClick = () => {
@@ -195,21 +196,38 @@ const Puzzle = () => {
         </button>
       </div>
       <div className={s.Puzzle}>
-        <PuzzleSquare
-          width={810}
-          height={600}
-          image={puzzleParams.imageUrl}
-          piecesX={puzzleParams.numOfFragHorizontal}
-          piecesY={puzzleParams.numOfFragVertical}
-          positions={puzzleParams.positions}
-          draggedElements={puzzleParams.draggedElements}
-          assemblyType={puzzleParams.assemblyType}
-          onComplete={onComplete}
-          currentPos={handleCurrentPositions}
-          currentDragPos={handleCurrentDraggedElements}
-          score={score}
-          setScore={setScore}
-        />
+        {puzzleParams.fragmentType == "Прямоугольные" ?  
+          <PuzzleSquare
+            width={810}
+            height={600}
+            image={puzzleParams.imageUrl}
+            piecesX={puzzleParams.numOfFragHorizontal}
+            piecesY={puzzleParams.numOfFragVertical}
+            positions={puzzleParams.positions}
+            draggedElements={puzzleParams.draggedElements}
+            assemblyType={puzzleParams.assemblyType}
+            onComplete={onComplete}
+            currentPos={handleCurrentPositions}
+            currentDragPos={handleCurrentDraggedElements}
+            score={score}
+            setScore={setScore}
+          /> : 
+          <PuzzleTriangle
+            width={810}
+            height={600}
+            image={puzzleParams.imageUrl}
+            piecesX={puzzleParams.numOfFragHorizontal}
+            piecesY={puzzleParams.numOfFragVertical / 2}
+            positions={puzzleParams.positions}
+            draggedElements={puzzleParams.draggedElements}
+            assemblyType={puzzleParams.assemblyType}
+            onComplete={onComplete}
+            currentPos={handleCurrentPositions}
+            currentDragPos={handleCurrentDraggedElements}
+            score={score}
+            setScore={setScore}
+          />
+        }
       </div>
       <Modal visible={visible.modalSave}>
         <div>
