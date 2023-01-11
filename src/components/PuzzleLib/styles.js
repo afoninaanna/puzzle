@@ -1,5 +1,4 @@
 export const puzzleWrapperStyles = (props) => ({
-    gridArea: "f",
     display: 'flex',
     flexWrap: 'wrap',
     padding: 0,
@@ -7,7 +6,7 @@ export const puzzleWrapperStyles = (props) => ({
     height: `${props.height}px`
 });
 
-export const puzzlePieceStyles = (props) => ({
+export const puzzlePieceSquareStyles = (props) => ({
   width: `${props.width / props.piecesX}px`,
   height: `${props.height / props.piecesY}px`,
   margin: "0 -1px -1px",

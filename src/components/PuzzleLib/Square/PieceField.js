@@ -1,9 +1,9 @@
 import React, { memo } from "react";
 import PropTypes from "prop-types";
 import { useDrag, useDrop } from "react-dnd";
-import { puzzlePieceStyles } from "./styles";
+import { puzzlePieceSquareStyles } from "../styles";
 
-const Piece = memo((props) => {
+const PieceField = memo((props) => {
   const { position, indexField, indexTape, onDropPiece } = props;
 
   const [, dragEl] = useDrag({
@@ -28,16 +28,16 @@ const Piece = memo((props) => {
   });
   return (
     <div className="puzzle-piece" ref={dropRef}>
-      <div ref={dragEl} style={puzzlePieceStyles({ ...props, isOver })}></div>
+      <div ref={dragEl} style={puzzlePieceSquareStyles({ ...props, isOver })}></div>
     </div>
   );
 });
 
-Piece.propTypes = {
+PieceField.propTypes = {
   image: PropTypes.string.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   onDropPiece: PropTypes.func.isRequired,
 };
 
-export default Piece;
+export default PieceField;

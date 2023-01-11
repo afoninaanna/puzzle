@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import PropTypes from "prop-types";
 import { useDrag, useDrop } from "react-dnd";
-import { puzzlePieceStyles } from "./styles";
+import { puzzlePieceSquareStyles } from "../styles";
 
 const PieceTape = memo((props) => {
   // console.log(props);
@@ -13,7 +13,7 @@ const PieceTape = memo((props) => {
 
   return (
     <div className="puzzle-piece">
-      <div ref={dragEl} style={puzzlePieceStyles({ ...props })}></div>
+      <div ref={dragEl} style={puzzlePieceSquareStyles({ ...props })}></div>
     </div>
   );
 });

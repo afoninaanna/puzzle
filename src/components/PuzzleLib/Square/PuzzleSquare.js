@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { puzzleWrapperStyles, puzzleTapeStyles } from './styles';
-import { shuffle, isEqual } from './utils';
-import Piece from './Piece';
+import { puzzleWrapperStyles, puzzleTapeStyles } from '../styles';
+import { shuffle, isEqual } from '../utils';
+import Field from './PieceField';
 import PieceTape from "./PieceTape";
 
 let positionScore = [];
-const Puzzle = (props) => {
+let lastIndex = 0;
+const PuzzleSquare = (props) => {
   const { width, height, piecesX, piecesY, onComplete } = props;
   //Изначальные позиции пазла
   const rootPositions = [...Array(piecesX * piecesY).keys()];
@@ -123,15 +124,16 @@ const Puzzle = (props) => {
       setDraggedElements(newPositions);
       newArr = newPositions;
     }
-    countScore(sourcePosition, dropPosition, newArr);
+    
     // Пока не знаю как реализовать обмен фрагментов на поле м/у пустым и непустым
-    // else if (dropPosition == null && indexTape == undefined) {
-    //   const newDraggedElements = [...draggedElements];
-    //   newDraggedElements[indexField] = newDraggedElements[lastIndex];
-    //   newDraggedElements[lastIndex] = null;
-    //   setDraggedElements(newDraggedElements);
-    // }
-    // lastIndex = indexField;
+    else if (dropPosition == null) {
+      const newDraggedElements = [...draggedElements];
+      newDraggedElements[indexField] = newDraggedElements[lastIndex];
+      newDraggedElements[lastIndex] = null;
+      setDraggedElements(newDraggedElements);
+    }
+    lastIndex = indexField;
+    countScore(sourcePosition, dropPosition, newArr);
   };
 
   //Функция для перестановки фрагментов, если сборка на поле
@@ -186,7 +188,7 @@ const Puzzle = (props) => {
   //Рендеринг фрагментов на поле, если режим "На ленте"
   const renderPiecesWithTape = () =>
     draggedElements.map((i, index) => (
-      <Piece
+      <Field
         key={index + "_field"}
         position={i}
         indexField={index}
@@ -209,7 +211,7 @@ const Puzzle = (props) => {
   //Рендеринг фрагментов на поле, если режим "На поле"
   const renderPiecesOnlyField = () =>
     positions.map((i, index) => (
-      <Piece
+      <Field
         key={index + "_field"}
         position={i}
         indexField={index}
@@ -244,7 +246,7 @@ const Puzzle = (props) => {
   );
 };
 
-Puzzle.propTypes = {
+PuzzleSquare.propTypes = {
   image: PropTypes.string.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
@@ -253,7 +255,7 @@ Puzzle.propTypes = {
   onComplete: PropTypes.func,
 };
 
-Puzzle.defaultProps = {
+PuzzleSquare.defaultProps = {
   width: 400,
   height: 300,
   piecesY: 4,
@@ -261,4 +263,4 @@ Puzzle.defaultProps = {
   onComplete: () => {},
 };
 
-export default Puzzle;
+export default PuzzleSquare;
