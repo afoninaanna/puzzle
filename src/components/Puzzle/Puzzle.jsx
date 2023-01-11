@@ -156,6 +156,10 @@ const Puzzle = () => {
   function handleLogOut() {
     //logout
     signOut(auth);
+    //sound off
+    audio.stop();
+    audio.unload();
+    audio = null;
   }
 
   return (
@@ -272,7 +276,11 @@ const Puzzle = () => {
           <p>Ваш счет: {score}</p>
         ) : null}
         <Link to={USER_SETTINGS_ROUTE}>
-          <button className={s.Button}>Завершить игру</button>
+          <button className={s.Button} onClick={()=>{
+            audio.stop();
+            audio.unload();
+            audio = null;
+          }}>Завершить игру</button>
         </Link>
       </Modal>
     </div>
