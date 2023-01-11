@@ -67,28 +67,30 @@ const Difficulty = (props) => {
         <p>
           Количество фрагментов
           <br />
-          по вертикали
+          по горизонтали
         </p>
         <input
-          type="range"
+          type="number"
           max="10"
           min="4"
-          value={numOfFragVertical}
-          onChange={(e) => setNumOfFragVertical(Number(e.target.value))}
+          step={fragmentType === 'Треугольные'? 2: 1}
+          value={((fragmentType === 'Треугольные') && (numOfFragHorizontal % 2)) ? 6 : numOfFragHorizontal}
+          onChange={(e) => setNumOfFragHorizontal(Number(e.target.value))}
         ></input>
       </form>
       <form className={s.Field}>
         <p>
           Количество фрагментов
           <br />
-          по горизонтали
+          по вертикали
         </p>
         <input
-          type="range"
+          type="number"
           max="10"
           min="4"
-          value={numOfFragHorizontal}
-          onChange={(e) => setNumOfFragHorizontal(Number(e.target.value))}
+          step={fragmentType === 'Треугольные' ? 2 : 1} 
+          value={((fragmentType === 'Треугольные') && (numOfFragVertical % 2)) ? 6 : numOfFragVertical}
+          onChange={(e) => setNumOfFragVertical(Number(e.target.value))}
         ></input>
       </form>
       <form className={s.Field}>
