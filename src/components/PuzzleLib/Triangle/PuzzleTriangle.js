@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import { puzzleWrapperStyles } from '../styles';
+import { puzzleWrapperStyles, puzzleTapeStyles } from '../styles';
 import { shuffleTriangle, isEqual } from "../utils";
 import PieceTriangleTop from "./PieceTriangleTop";
 import PieceTriangleBottom from "./PieceTriangleBottom";
+import PieceTriangleTapeTop from "./PieceTriangleTapeTop";
+import PieceTriangleTapeBottom from "./PieceTriangleTapeBottom";
 
 let positionScore = [];
 const PuzzleTriangle = (props) => {
@@ -15,6 +17,19 @@ const PuzzleTriangle = (props) => {
   //Выбор изначальных позиций (из БД - если игрок, изначальные - если админ)
   const [positions, setPositions] = useState(
     props.positions ? props.positions : rootPositions
+  );
+  /*
+  Если сборка на ленте, то используем эту переменную как отдельные позиции на поле.
+  Выбор изначальных позиций (из БД - если игрок, пустые - если админ)
+  */
+  const [draggedElements, setDraggedElements] = useState(
+    props.draggedElements
+      ? [...Array(piecesX * piecesY)].map((i, index) =>
+          props.draggedElements[index] != null
+            ? props.draggedElements[index]
+            : null
+        )
+      : [...Array(piecesX * piecesY)].map(() => null)
   );
 
   //Координаты фрагментов
@@ -31,7 +46,7 @@ const PuzzleTriangle = (props) => {
   useEffect(() => {
     if (props.difficulty) {
       setPositions(rootPositions);
-      // setDraggedElements([...Array(piecesX * piecesY)].map(() => null));
+      setDraggedElements([...Array(piecesX * piecesY)].map(() => null));
     }
   }, [props.difficulty]);
 
@@ -40,6 +55,7 @@ const PuzzleTriangle = (props) => {
     if (props.isShuffled) {
       setPositions(shuffleTriangle(rootPositions));
       props.setIsShuffled(false);
+      setDraggedElements([...Array(piecesX * piecesY)].map(() => null));
     }
   }, [props.isShuffled]);
 
@@ -49,16 +65,17 @@ const PuzzleTriangle = (props) => {
     let pos = positions;
     props.currentPos(pos);
   };
-  // const handleCurrentDraggedElements = () => {
-  //   let dragPos = draggedElements;
-  //   props.currentDragPos(dragPos);
-  // };
+  const handleCurrentDraggedElements = () => {
+    let dragPos = draggedElements;
+    props.currentDragPos(dragPos);
+  };
   useEffect(() => {
     handleCurrentPositions();
-    // if (props.assemblyType == "На ленте") {
-    //   handleCurrentDraggedElements();
-    // }
-  }, [positions /*draggedElements*/]);
+    if (props.assemblyType == "На ленте") {
+      handleCurrentDraggedElements();
+    }
+    console.log(positions);
+  }, [positions, draggedElements]);
 
   //Надо обнулить позиции с которых не получаются очки
   useEffect(() => {
@@ -70,28 +87,80 @@ const PuzzleTriangle = (props) => {
     if (isEqual(rootPositions, positions)) {
       onComplete();
     }
-    // if (isEqual(rootPositions, draggedElements)) {
-    //   onComplete();
-    // }
-  }, [positions /*draggedElements*/]);
+    if (isEqual(rootPositions, draggedElements)) {
+      onComplete();
+    }
+  }, [positions, draggedElements]);
 
-  const onDropPiece = (sourcePosition, dropPosition) => {
+  //Функция для перестановки фрагментов, если сборка на ленте
+  const onDropPieceWithTape = (
+    sourcePosition,
+    dropPosition,
+    indexField,
+    indexTape
+  ) => {
+    let newArr = [];
+    if (dropPosition == null && indexTape != null) {
+      setPositions([...positions.filter((elem) => elem !== sourcePosition)]);
+      const newDraggedElements = [...draggedElements];
+      newDraggedElements[indexField] = sourcePosition;
+      setDraggedElements([]);
+      setDraggedElements(newDraggedElements);
+      newArr = newDraggedElements;
+    } else if (
+      sourcePosition != null &&
+      dropPosition != null &&
+      indexTape == undefined
+    ) {
+      const oldPositions = draggedElements.slice();
+      const newPositions = [];
+
+      for (let i in oldPositions) {
+        const value = oldPositions[i];
+        let newValue = value;
+
+        if (value === sourcePosition) {
+          newValue = dropPosition;
+        } else if (value === dropPosition) {
+          newValue = sourcePosition;
+        }
+        newPositions.push(newValue);
+      }
+      setDraggedElements([]);
+      setDraggedElements(newPositions);
+      newArr = newPositions;
+    }
+    
+    // Пока не знаю как реализовать обмен фрагментов на поле м/у пустым и непустым
+    // else if (dropPosition == null) {
+    //   const newDraggedElements = [...draggedElements];
+    //   newDraggedElements[indexField] = newDraggedElements[lastIndex];
+    //   newDraggedElements[lastIndex] = null;
+    //   setDraggedElements(newDraggedElements);
+    // }
+    // lastIndex = indexField;
+    countScore(sourcePosition, dropPosition, newArr);
+  };
+
+  //Функция для перестановки фрагментов, если сборка на поле
+  const onDropPieceOnlyField = (
+    sourcePosition,
+    dropPosition,
+    indexField,
+    indexTape
+  ) => {
     const oldPositions = positions.slice();
     const newPositions = [];
-
     for (let i in oldPositions) {
       const value = oldPositions[i];
       let newValue = value;
-
       if (value === sourcePosition) {
         newValue = dropPosition;
       } else if (value === dropPosition) {
         newValue = sourcePosition;
       }
-
       newPositions.push(newValue);
     }
-
     setPositions(newPositions);
     countScore(sourcePosition, dropPosition, newPositions);
   };
@@ -122,21 +191,68 @@ const PuzzleTriangle = (props) => {
     }
   };
 
-  const renderPieces = () =>
-    positions.map((i, index) =>
+  //Рендеринг фрагментов на поле, если режим "На ленте"
+  const renderPiecesWithTape = () =>
+    draggedElements.map((i, index) =>
       index % 2 == 0 ? (
         <PieceTriangleTop
-          key={i}
+          key={index + "_field"}
           position={i}
-          onDropPiece={onDropPiece}
+          indexField={index}
+          onDropPiece={onDropPieceWithTape}
           {...coords[i]}
           {...props}
         />
       ) : (
         <PieceTriangleBottom
-          key={i}
+          key={index + "_field"}
           position={i}
-          onDropPiece={onDropPiece}
+          indexField={index}
+          onDropPiece={onDropPieceWithTape}
+          {...coords[i]}
+          {...props}
+        />
+      )
+    );
+  //Рендеринг фрагментов на ленте, если режим "На ленте"
+  const renderPiecesTape = () =>
+    positions.map((i, index) =>
+      i % 2 == 0 ? (
+        <PieceTriangleTapeTop
+          key={index + "_field"}
+          position={i}
+          indexTape={index}
+          {...coords[i]}
+          {...props}
+        />
+      ) : (
+        <PieceTriangleTapeBottom
+          key={index + "_field"}
+          position={i}
+          indexTape={index}
+          {...coords[i]}
+          {...props}
+        />
+      )
+    );
+  //Рендеринг фрагментов на поле, если режим "На поле"
+  const renderPiecesOnlyField = () =>
+    positions.map((i, index) =>
+      index % 2 == 0 ? (
+        <PieceTriangleTop
+          key={index + "_field"}
+          position={i}
+          indexField={index}
+          onDropPiece={onDropPieceOnlyField}
+          {...coords[i]}
+          {...props}
+        />
+      ) : (
+        <PieceTriangleBottom
+          key={index + "_field"}
+          position={i}
+          indexField={index}
+          onDropPiece={onDropPieceOnlyField}
           {...coords[i]}
           {...props}
         />
@@ -145,9 +261,19 @@ const PuzzleTriangle = (props) => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div style={puzzleWrapperStyles({ width, height })}>{renderPieces()}</div>
-      <style>
-        {`
+      <div style={{ display: "flex", gap: 20 }}>
+        <div style={puzzleWrapperStyles({ width, height })}>
+          {props.assemblyType == "На ленте"
+            ? renderPiecesWithTape()
+            : renderPiecesOnlyField()}
+        </div>
+        {props.assemblyType == "На ленте" ? (
+          <div style={puzzleTapeStyles({ width, height })}>
+            {renderPiecesTape()}
+          </div>
+        ) : null}
+        <style>
+          {`
           .puzzle-piece:hover {
             opacity: 0.8;
           }
@@ -164,7 +290,8 @@ const PuzzleTriangle = (props) => {
             clip-path: polygon(0 100%, 100% 100%, 100% 0);
           }
         `}
-      </style>
+        </style>
+      </div>
     </DndProvider>
   );
 };

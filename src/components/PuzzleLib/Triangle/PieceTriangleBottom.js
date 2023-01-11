@@ -4,10 +4,10 @@ import { useDrag, useDrop } from 'react-dnd';
 import { puzzlePieceBottomStyles } from '../styles';
 
 const PieceTriangleBottom = memo((props) => {
-  const { position, onDropPiece } = props;
+  const { position, indexField, indexTape, onDropPiece } = props;
 
   const [, dragEl] = useDrag({
-    item: { position, type: 'PIECE-BOTTOM' },
+    item: { position, indexField, indexTape, type: 'PIECE-BOTTOM' },
   });
 
   const [{ isOver }, dropRef] = useDrop({
@@ -15,7 +15,9 @@ const PieceTriangleBottom = memo((props) => {
     drop: (props) => {
       onDropPiece(
         props.position, // source position
-        position // drop position
+        position, // drop position
+        indexField,
+        props.indexTape
       );
     },
     collect: (monitor) => {

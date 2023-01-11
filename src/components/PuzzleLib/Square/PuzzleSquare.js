@@ -50,6 +50,7 @@ const PuzzleSquare = (props) => {
     if (props.isShuffled) {
       setPositions(shuffle(rootPositions));
       props.setIsShuffled(false);
+      setDraggedElements([...Array(piecesX * piecesY)].map(() => null));
     }
   }, [props.isShuffled]);
 
